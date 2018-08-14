@@ -26,6 +26,11 @@
 		}
 		submitPage(frm, "<s:url value='/jsp/security/checkLogin.action' />");
 	}
+
+	function refreshCaptCha() {
+		console.log("test");
+		document.getElementById("captchaImg").setAttribute("src", "<s:url value='/captchaImageServlet'/>");
+	}
 </script>
 </head>
 <body onload="sf();">
@@ -41,13 +46,13 @@
 			<div id="flipbox" class="flipbox" style="height: 400px; width: 450px; margin: 0 auto;">
 				<div id="login" class="login_form">
 					<div class="login_title"><s:text name='login.sign_in'/></div>
-						<div style="padding-bottom: 7px; padding-top: 7px;">
-							<table class="FORM">
-								<tr>
-									<td class="MESSAGE">&nbsp;</td>
-								</tr>
-							</table>
-						</div>
+					<div style="padding-bottom: 7px; padding-top: 7px;">
+						<table class="FORM">
+							<tr>
+								<td class="MESSAGE">&nbsp;</td>
+							</tr>
+						</table>
+					</div>
 					<div class="login_body" style="margin-top: -5px;">
 						<table class="FORM">
 							<tr>
@@ -67,7 +72,7 @@
 							<tr>
 								<td style="width: 25%;" class="LABEL"></td>
 								<td style="width: 50%;" class=""><img id="captchaImg" src="<s:url value='/captchaImageServlet'/>" style="width: 100%;" /></td>
-								<td style="width: 24%; vertical-align:top; padding-left: 10px;"><img onclick="refreshCaptCha();" src="<s:url value='/images/icon/i_reset_password.png' />" /></td>
+								<td style="width: 24%; vertical-align:top; padding-left: 10px;"><img onclick="refreshCaptCha();" src="<s:url value='/images/icon/i_refresh.png' />" /></td>
 							</tr>
 							<tr>
 								<td style="width: 25%;" class="LABEL"><s:text name="login.captcha"/><em>*</em></td>

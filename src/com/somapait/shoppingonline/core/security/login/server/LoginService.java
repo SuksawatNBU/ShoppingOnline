@@ -27,5 +27,15 @@ public class LoginService extends AbstractService {
 		return result;
 		
 	}
+	
+	protected long checkDupLogin(Connection conn, String username, String password) throws Exception {
+		long count = 0;
+		try{
+			count = dao.checkDupLogin(conn, username, password);
+		}catch (Exception e) {
+			throw e;
+		}
+		return count;
+	}
 
 }

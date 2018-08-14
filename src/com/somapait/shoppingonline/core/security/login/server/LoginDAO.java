@@ -62,21 +62,39 @@ public class LoginDAO {
             ConnectionUtil.closeAll(rst, stmt);
         }
 		return result;
-		
 	}
 	
-	/*public static void main(String[] args) {
-		LoginDAO login = new LoginDAO();
-		Connection conn = null;
-		try {
-			CommonUser result = new CommonUser();
-			
-			result = login.searchUserLogin(conn, "manit.r", "123456");
-			
-			System.out.println("result : " + result.getFullName());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}*/
+	protected long checkDupLogin(Connection conn, String username, String password) throws Exception {
+		
+		int count = 0;
+	
+		int paramIndex = 0;
+	    Object[] params = new Object[2];
+	    params[paramIndex++] = StringUtil.replaceSpecialString(username, dbType, ResultType.NULL);
+        params[paramIndex++] = StringUtil.replaceSpecialString(password, dbType, ResultType.NULL);
+		
+        String sql = SQLUtil.getSQLString(schemas
+	            , getSqlPath().getClassName()
+	            , getSqlPath().getPath()
+	            , "checkDupLogin"
+	            , params);
+	    LogUtil.LOGIN.debug("SQL : " + sql);
+	    
+	    
+	    Statement stmt = null;
+		ResultSet rst = null;
+		try{
+			stmt = conn.createStatement();
+	        rst = stmt.executeQuery(sql);
+	        if (rst.next()) {
+	            count = rst.getInt("TOT");
+	        }
+		}catch (Exception e) {
+			throw e;
+		}finally {
+            ConnectionUtil.closeAll(rst, stmt);
+        }
+		return count;
+		
+	}
 }

@@ -12,6 +12,7 @@ public class LoginModel extends CommonModel{
 	private String fullName; //ชื่อ
 	private String password; // รหัสผ่านเดิม
 	private String captcha; // ตัวอักษร
+	private String captchaEnable;
 
 	public String getTitle() {
 		return title;
@@ -49,4 +50,11 @@ public class LoginModel extends CommonModel{
 	public void setCaptcha(String captcha) {
 		this.captcha = captcha;
 	}
+	public String getCaptchaEnable() {
+		return captchaEnable;
+	}
+	public void setCaptchaEnable(String captchaEnable) {
+		this.captchaEnable = captchaEnable;
+	}
+	
 }

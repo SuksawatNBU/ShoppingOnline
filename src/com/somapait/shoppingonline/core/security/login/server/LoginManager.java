@@ -30,4 +30,14 @@ public class LoginManager{
 		}
 		return result;
 	}
+	
+	public long checkDupLogin(String username, String password) throws Exception {
+		long count = 0;
+		try{
+			count = service.checkDupLogin(conn, username, password);
+		}catch (Exception e) {
+			throw e;
+		}
+		return count;
+	}
 }
