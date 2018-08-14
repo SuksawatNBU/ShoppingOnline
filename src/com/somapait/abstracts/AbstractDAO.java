@@ -3,6 +3,8 @@ package com.somapait.abstracts;
 import java.sql.Connection;
 import java.util.List;
 
+import com.somapait.shoppingonline.core.config.parameter.domain.SQLPath;
+
 /**
  * @param <C>
  *            Criteria
@@ -16,6 +18,16 @@ import java.util.List;
  *            Locale
  */
 public abstract class AbstractDAO<C, R, T, U, L> {
+	
+	private SQLPath sqlPath;
+
+	public SQLPath getSqlPath() {
+		return sqlPath;
+	}
+
+	public void setSqlPath(SQLPath sqlPath) {
+		this.sqlPath = sqlPath;
+	}
 
 	/**
 	 * @Desc For Count Search Button

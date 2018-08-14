@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import com.somapait.common.CommonUser;
 
-
 /**
  * @param <C>
  *            Criteria

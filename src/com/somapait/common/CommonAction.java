@@ -448,6 +448,7 @@ public class CommonAction extends ActionSupport implements Serializable {
 		this.alertMaxExceed = alertMaxExceed;
 	}
 
+	@SuppressWarnings("unused")
 	private String getUserIdFromSession() {
 		String userId = null;
 		if (USER != null) {

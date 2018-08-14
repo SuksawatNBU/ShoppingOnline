@@ -1,0 +1,9 @@
+searchUserLogin {
+	SELECT
+	  USER_ID
+	  , CONCAT(FIRST_NAME, ' ', LAST_NAME) AS FULLNAME
+	  , ADMIN
+	FROM USER
+	WHERE LOGIN_NAME = %s
+	AND PASSWORD = %s
+}

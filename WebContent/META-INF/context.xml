@@ -40,7 +40,7 @@
 		driverClassName="com.mysql.cj.jdbc.Driver" 
 		url="jdbc:mysql://127.0.0.1:3306/PG_EXAM_SHOPPING?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull&amp;useJDBCCompliantTimezoneShift=true&amp;serverTimezone=UTC&amp;useSSL=false" 
 		username="root" 
-		password="password"
+		password="86202"
 		maxWaitMillis="-1" 
 		maxTotal="1" 
 		maxIdle="1"  />

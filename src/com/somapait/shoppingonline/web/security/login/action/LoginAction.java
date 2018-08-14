@@ -1,9 +1,9 @@
 package com.somapait.shoppingonline.web.security.login.action;
 
 import java.sql.Connection;
-import java.util.LinkedHashMap;
 import java.util.Locale;
 
+import util.database.ConnectionProvider;
 import util.database.ConnectionUtil;
 import util.log.LogUtil;
 import util.web.SessionUtil;
@@ -11,9 +11,10 @@ import util.web.SessionUtil;
 import com.opensymphony.xwork2.ModelDriven;
 import com.somapait.common.CommonAction;
 import com.somapait.common.CommonUser;
-import com.somapait.domain.Operator;
 import com.somapait.exception.AuthorizationException;
+import com.somapait.shoppingonline.core.config.parameter.domain.DBLookup;
 import com.somapait.shoppingonline.core.security.login.domain.LoginModel;
+import com.somapait.shoppingonline.core.security.login.server.LoginManager;
 
 public class LoginAction extends CommonAction implements ModelDriven<LoginModel>{
 
@@ -46,20 +47,33 @@ public class LoginAction extends CommonAction implements ModelDriven<LoginModel>
 	}
 
 	public String check() {
+		
 		LogUtil.LOGIN.info("");
 		String result = ReturnType.INIT.getResult();
-
+		Connection conn = null;
 		try {
-			CommonUser user = new CommonUser();
-			user.setUserId("1");
-			user.setLocale(new Locale("th"));
-
-
-			SessionUtil.put(CommonUser.DEFAULT_SESSION_ATTRIBUTE, user);
+			
+			//1.สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
+			conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
+			
+			//2.กำหนดหน้าของผลลัพธ์
 			result = ReturnType.MAINPAGE.getResult();
+			
+			//3.ค้นหาข้อมูล
+			LoginManager manager = new LoginManager(conn);
+			CommonUser user = manager.searchUserLogin(model.getUsername(), model.getPassword());
+			user.setLocale(new Locale("th"));
+			
+			//4.
+			
+			//5.
+			SessionUtil.put(CommonUser.DEFAULT_SESSION_ATTRIBUTE, user);
+			
 		} catch (Exception e) {
 			LogUtil.LOGIN.error("", e);
 			setMessage(CommonAction.MessageType.ERROR, "Message error form server.", getErrorMessage(e), ResultType.BASIC);
+		} finally {
+			ConnectionUtil.close(conn);
 		}
 		return result;
 	}
@@ -75,3 +89,4 @@ public class LoginAction extends CommonAction implements ModelDriven<LoginModel>
 	}
 
 }
+

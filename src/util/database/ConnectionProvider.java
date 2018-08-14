@@ -66,6 +66,7 @@ public class ConnectionProvider {
 				conn = ds.get(lookup).getConnection();
 			}
 		} catch (Exception e) {
+			log.error("", e);
 			throw e;
 		}
 

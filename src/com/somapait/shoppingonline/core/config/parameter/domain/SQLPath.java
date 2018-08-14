@@ -10,7 +10,8 @@ public enum SQLPath implements Serializable {
 	 * @Description: Class enum for data base lookup
 	 */
 	SELECT_ITEM_SQL(SelectItemSQL.class, "resources/sql/selectitem/SelectItem.sql"),
-	LOGIN_SQL(SecuritySQL.class, "resources/sql/security/Login.sql")
+	LOGIN_SQL(SecuritySQL.class, "resources/sql/security/Login.sql"),
+	SHOPPING(SecuritySQL.class, "resources/sql/shopping/Shopping.sql")
 	;
 
 	private String path;
