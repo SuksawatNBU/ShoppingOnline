@@ -1,12 +1,15 @@
 package com.somapait.shoppingonline.core.shopping.admin.sale.service;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import com.somapait.abstracts.AbstractService;
 import com.somapait.common.CommonUser;
 import com.somapait.shoppingonline.core.config.parameter.domain.SQLPath;
-
+import com.somapait.shoppingonline.core.shopping.admin.sale.domain.AdminSaleSearch;
+import com.somapait.shoppingonline.core.shopping.admin.sale.domain.AdminSaleSearchCriteria;
 /**
  * @description Class สำหรับจัดการ logic or algorithm (ถ้ามี)
  * @author -
@@ -20,6 +23,26 @@ public class AdminSaleService extends AbstractService {
 		super(conn, user, locale);
 		this.dao = new AdminSaleDAO();
 		this.dao.setSqlPath(SQLPath.SHOPPING_ADMIN);
+	}
+	
+	protected int countData(Connection conn, AdminSaleSearchCriteria criteria, CommonUser user, Locale locale) throws Exception {
+		int totalResult = 0;
+	    try {
+	        totalResult = dao.countData(conn, criteria, user, locale);
+	    } catch (Exception e) {
+	        throw e;
+	    }
+		return totalResult;
+	}
+	
+	protected List<AdminSaleSearch> search(Connection conn, AdminSaleSearchCriteria criteria, CommonUser user, Locale locale) throws Exception {
+		List<AdminSaleSearch> listResult = new ArrayList<AdminSaleSearch>();
+		try{
+			listResult = dao.search(conn, criteria, user, locale);
+		}catch (Exception e) {
+			throw e;
+		}
+		return listResult;
 	}
 
 }

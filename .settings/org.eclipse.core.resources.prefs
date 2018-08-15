@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//WebContent/jsp/shopping/admin/sale/orderdSearch.jsp=UTF-8
 encoding//WebContent/jsp/shopping/customers/sale/productListSearch.jsp=UTF-8
 encoding//src/com/somapait/shoppingonline/web/shopping/customers/sale/action/CustomerSaleAction.java=UTF-8
 encoding/<project>=UTF-8

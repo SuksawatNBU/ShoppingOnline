@@ -10,6 +10,7 @@ import com.somapait.common.CommonUser;
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSale;
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleSearch;
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleSearchCriteria;
+import com.somapait.shoppingonline.core.shopping.domain.OrderDetail;
 
 import util.log.LogUtil;
 
@@ -59,8 +60,32 @@ public class CustomerSaleManager extends AbstractManager<CustomerSaleSearchCrite
 
 	@Override
 	public int add(CustomerSale obj) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		int id = 0;
+		try {
+	        //1.Begin transaction
+	        conn.setAutoCommit(false);
+	        
+	        //2.เพิ่มข้อมูล OrderMain
+	        id = service.addOrderMain(conn, obj.getOrderMain(), user, locale);
+	        
+	        //3. วนลุปเพื่อเพิ่ม OrderDetail
+	        for(OrderDetail orderDetail : obj.getListOrderDetail()){
+	        	orderDetail.setOrderId(String.valueOf(id));
+	        	service.addOrderDetail(conn, orderDetail, user, locale);
+	        }
+	        
+	        //4. Commit transaction
+	        conn.commit();
+	        
+	    } catch (Exception e) {
+	        //5. Rollback transaction เมื่อเกิด Error
+	        conn.rollback();
+	        throw e;
+	    } finally {
+	        //6. Set AutoCommit กลับคืนเป็น True
+	        conn.setAutoCommit(true);
+	    }
+		return id;
 	}
 
 	@Override

@@ -11,6 +11,7 @@ public class Product extends CommonDomain{
 	 * 
 	 */
 	private static final long serialVersionUID = 6127263822792589922L;
+	private String id;
 	private String code;
 	private String productDesc;
 	private String price;
@@ -76,6 +77,11 @@ public class Product extends CommonDomain{
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
-	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	
 }

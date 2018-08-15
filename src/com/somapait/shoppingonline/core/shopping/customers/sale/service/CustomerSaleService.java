@@ -10,6 +10,8 @@ import com.somapait.common.CommonUser;
 import com.somapait.shoppingonline.core.config.parameter.domain.SQLPath;
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleSearch;
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleSearchCriteria;
+import com.somapait.shoppingonline.core.shopping.domain.OrderDetail;
+import com.somapait.shoppingonline.core.shopping.domain.OrderMain;
 
 /**
  * @description Class สำหรับจัดการ logic or algorithm (ถ้ามี)
@@ -50,10 +52,25 @@ public class CustomerSaleService extends AbstractService {
 		return listResult;
 	}
 	
+	protected int addOrderMain(Connection conn, OrderMain obj, CommonUser user, Locale locale) throws Exception {
+		int id = 0;
+		try {
+			id = dao.addOrderMain(conn, obj, user, locale);
+		} catch (Exception e) {
+			throw e;
+		}
+		return id;
+	}
 	
-	
-	
-	
+	protected int addOrderDetail(Connection conn, OrderDetail obj, CommonUser user, Locale locale) throws Exception {
+		int id = 0;
+		try {
+			id = dao.addOrderDetail(conn, obj, user, locale);
+		} catch (Exception e) {
+			throw e;
+		}
+		return id;
+	}
 	
 
 }

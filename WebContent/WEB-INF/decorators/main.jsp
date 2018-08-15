@@ -86,12 +86,20 @@
 				<td class="content">
 					<div id="container">
 						<div id="leftPanel" class="leftPanel">
-							<UL><LI><a href='#'>Product</a></LI>
-							<UL><LI><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action'>Dress</a></LI></UL>
-							<UL><LI><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action'>Shoes</a></LI></UL>
-							<UL><LI><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action'>Bags</a></LI></UL>
-							<UL><LI><a href='/shoppingonline/jsp/shopping/gotoMyCartAddCustomerSale.action'>My Cart</a></LI></UL>
-							</LI></UL>
+							<ul>
+								<li><a href='#'>Product</a></li>
+								<ul><li><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action'>Dress</a></li></ul>
+								<ul><li><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action'>Shoes</a></li></ul>
+								<ul><li><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action'>Bags</a></li></ul>
+								<ul><li><a href='/shoppingonline/jsp/shopping/gotoMyCartAddCustomerSale.action'>My Cart</a></li></ul>
+								<s:if test="%{#USER.active == 'Y'}">
+									<ul><li><a href='/shoppingonline/jsp/shopping/gotoOrderListAdminSale.action'>Order List</a></li></ul>
+								</s:if>
+								<s:else>
+									<s:property value="USER.active" />
+									<ul><li><a href='/shoppingonline/jsp/shopping/gotoOrderListAdminSale.action'>Order List</a></li></ul>
+								</s:else>
+							</ul>
 						</div>
 						<div id="rightPanel" class="rightPanel">
 							<decorator:body></decorator:body>

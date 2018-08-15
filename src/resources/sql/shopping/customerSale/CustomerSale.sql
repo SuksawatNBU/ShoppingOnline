@@ -50,3 +50,43 @@ searchProductById {
 	WHERE P.ID = %s
 }
 
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL : เพิ่มรายการสั่งซื้อ
+Description : 
+------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+insertOrderMain {
+	INSERT INTO ORDER_MAIN (
+	  TOTAL_PRICE
+	  ,USER_ID
+	  ,ORDER_DATE
+	  ,SHIP
+	  ,SHIP_DATE
+	  ,TRACKING_NO
+	  ,CANCEL
+	  ,NOTE
+	) VALUES (
+		%s
+	  , %s
+	  , %s
+	  , %s
+	  , %s
+	  , %s
+	  , %s
+	  , %s
+	 )
+}
+
+insertOrderDetail {
+	INSERT INTO ORDER_DETIL(
+	  PRODUCT_ID
+	  ,TOTAL_NUM
+	  ,TOTAL_PRICE
+	  ,ORDER_ID
+	) VALUES (
+		%s
+	  , %s
+	  , %s
+	  , %s
+	)
+}
+
