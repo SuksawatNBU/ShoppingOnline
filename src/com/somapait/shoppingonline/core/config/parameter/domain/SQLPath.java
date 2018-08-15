@@ -11,7 +11,8 @@ public enum SQLPath implements Serializable {
 	 */
 	SELECT_ITEM_SQL(SelectItemSQL.class, "resources/sql/selectitem/SelectItem.sql"),
 	LOGIN_SQL(SecuritySQL.class, "resources/sql/security/Login.sql"),
-	SHOPPING(SecuritySQL.class, "resources/sql/shopping/Shopping.sql")
+	SHOPPING_ADMIN(SecuritySQL.class, "resources/sql/shopping/adminSale/AdminSale.sql"),
+	SHOPPING_CUSROMER(SecuritySQL.class, "resources/sql/shopping/customerSale/CustomerSale.sql"),
 	;
 
 	private String path;

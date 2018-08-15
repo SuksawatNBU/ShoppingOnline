@@ -58,11 +58,11 @@ public class LoginAction extends CommonAction implements ModelDriven<LoginModel>
 		String result = ReturnType.INIT.getResult();
 		
 		//1. ตรวจสอบ captcha
-		String sessionCaptcha = (String) ServletActionContext.getRequest().getSession().getAttribute(CaptchaImageServlet.DEFAULT_SESSION_ATTRIBUTE);
+		/*String sessionCaptcha = (String) ServletActionContext.getRequest().getSession().getAttribute(CaptchaImageServlet.DEFAULT_SESSION_ATTRIBUTE);
 		if(!model.getCaptcha().equals(sessionCaptcha)){
-			/*setMessage(MessageType.WARING, "กรุณากรอกข้อมูลให้ตรงกับภาพ", ResultType.BASIC);*/
+			setMessage(MessageType.WARING, "กรุณากรอกข้อมูลให้ตรงกับภาพ", ResultType.BASIC);
 			return result;
-		}
+		}*/
 		
 		Connection conn = null;
 		try {
@@ -70,7 +70,7 @@ public class LoginAction extends CommonAction implements ModelDriven<LoginModel>
 			//2. สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
 			conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
 			
-			//3. ตรวจสอบค่าว่าง
+			//3. ตรวจสอบค่าว่างในฐานข้อมูล
 			LoginManager manager = new LoginManager(conn);
 			long count = manager.checkDupLogin(model.getUsername(), model.getPassword());
 			if(count == 0){
@@ -85,7 +85,7 @@ public class LoginAction extends CommonAction implements ModelDriven<LoginModel>
 			//5. กำหนดหน้าของผลลัพธ์
 			result = ReturnType.MAINPAGE.getResult();
 			
-			//6.
+			//6. 
 			SessionUtil.put(CommonUser.DEFAULT_SESSION_ATTRIBUTE, user);
 			
 		} catch (Exception e) {
@@ -98,7 +98,7 @@ public class LoginAction extends CommonAction implements ModelDriven<LoginModel>
 	}
 
 	public String logout(){
-		//TODO
+		SessionUtil.remove("");
 		return ReturnType.INIT.getResult();
 	}
 

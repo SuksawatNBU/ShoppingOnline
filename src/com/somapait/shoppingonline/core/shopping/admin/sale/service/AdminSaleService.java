@@ -19,7 +19,7 @@ public class AdminSaleService extends AbstractService {
 	public AdminSaleService(Connection conn, CommonUser user, Locale locale) {
 		super(conn, user, locale);
 		this.dao = new AdminSaleDAO();
-		this.dao.setSqlPath(SQLPath.SHOPPING);
+		this.dao.setSqlPath(SQLPath.SHOPPING_ADMIN);
 	}
 
 }

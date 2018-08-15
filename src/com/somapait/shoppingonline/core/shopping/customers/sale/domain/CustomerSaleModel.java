@@ -1,5 +1,8 @@
 package com.somapait.shoppingonline.core.shopping.customers.sale.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.somapait.common.CommonModel;
 import com.somapait.domain.SearchCriteria;
 
@@ -10,6 +13,8 @@ public class CustomerSaleModel extends CommonModel {
 //	Data Type  ----------------------------------------------------------------------------
 	private CustomerSaleSearchCriteria criteria = new CustomerSaleSearchCriteria();
 	private CustomerSale customerSale = new CustomerSale();
+	private List<CustomerSaleSearch> listResult = new ArrayList<CustomerSaleSearch>();
+	
 	
 	
 //	Getter and Setter ---------------------------------------------------------------------
@@ -28,4 +33,12 @@ public class CustomerSaleModel extends CommonModel {
 	public void setCustomerSale(CustomerSale customerSale) {
 		this.customerSale = customerSale;
 	}
+	
+	public List<CustomerSaleSearch> getListResult() {
+		return listResult;
+	}
+	public void setListResult(List<CustomerSaleSearch> listResult) {
+		this.listResult = listResult;
+	}
+	
 }

@@ -28,8 +28,9 @@
 	}
 
 	function refreshCaptCha() {
-		console.log("test");
 		document.getElementById("captchaImg").setAttribute("src", "<s:url value='/captchaImageServlet'/>");
+		/* document.getElementById("captchaImg").src = "/captchaImageServlet"; */
+		/* document.getElementById("captchaImg").src = "/shoppingonline/captchaImageServlet"; */
 	}
 </script>
 </head>

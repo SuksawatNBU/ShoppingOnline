@@ -1,6 +1,7 @@
 package com.somapait.shoppingonline.web.shopping.customers.sale.action;
 
 import java.sql.Connection;
+import java.util.List;
 
 import com.opensymphony.xwork2.ModelDriven;
 import com.somapait.common.CommonAction;
@@ -8,9 +9,13 @@ import com.somapait.domain.Transaction;
 import com.somapait.exception.AuthorizationException;
 import com.somapait.interfaces.InterfaceAction;
 import com.somapait.shoppingonline.core.config.parameter.domain.DBLookup;
+import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSale;
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleModel;
+import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleSearch;
+import com.somapait.shoppingonline.core.shopping.customers.sale.service.CustomerSaleManager;
 
 import util.database.ConnectionProvider;
+import util.database.ConnectionUtil;
 import util.log.LogUtil;
 
 /**
@@ -40,8 +45,11 @@ public class CustomerSaleAction extends CommonAction implements ModelDriven<Cust
 
 	@Override
 	public String init() throws AuthorizationException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+		} catch (Exception e) {
+			
+		}
+		return ReturnType.INIT.getResult();
 	}
 
 	@Override
@@ -64,12 +72,6 @@ public class CustomerSaleAction extends CommonAction implements ModelDriven<Cust
 
 	@Override
 	public String gotoAdd() throws AuthorizationException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String add() throws AuthorizationException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -116,37 +118,97 @@ public class CustomerSaleAction extends CommonAction implements ModelDriven<Cust
 		
 	}
 
-	
-
 	//TODO method searchProductList() สำหรับค้นหาและแสดงรายการสินค้าแต่ละประเภทที่เลือกจากเมนู โดยรับค่าประเภทสินค้าจาก url แล้วแสดงรายการตามประเภทที่เลือก
-	public String searchProductList(){
+	public String searchProductList() throws Exception{
 		String result = null;
 	    Connection conn = null;
-	    
-	    try {
+	    try {	
 	    	//1.สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
 	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
 	        
 	        //2.ตรวจสอบสิทธิ์การใช้งาน และจัดการเงือนไขที่ใช้ในการค้นหา
-	        /*result = manageSearch(conn, model, model.getCriteria(), PFCode.SECURITY_USER.getSearchFunction());*/
+	        result = manageSearch(conn, model, model.getCriteria(), null);
+	        
+	        //3.การค้นหา
+	        CustomerSaleManager manager = new CustomerSaleManager(conn, null, getLocale());
+	        List<CustomerSaleSearch> listResult = manager.searchProductList(model.getCriteria());
+	        model.setListResult(listResult);
+	        
+	        //4.จัดการผลลัพธ์และข้อความ ถ้าไม่พบข้อมูล
+	        manageSearchResult(model, listResult);
 	        
 	    }catch (Exception e) {
-			// TODO: handle exception
+	    	manageException(conn, F_CODE, this, e, getModel());
 		} finally {
-			
+			ConnectionUtil.close(conn);
 		}
-	    
-	    
-		return null;
+		return result;
 			
 	}
 		
 	//TODO method addToCartAjax() สำหรับจัดการเก็บรายการสินค้าที่ต้องการลงบน session
+	public String addToCartAjax() throws Exception {
+		String result = null;
+	    Connection conn = null;
+	    try {
+	    	//1.สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
+	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
+	        
+	        //2.ตรวจสอบสิทธิ์การใช้งาน และจัดการเงือนไข
+	        result = manageSearch(conn, model, model.getCriteria(), null);
+	        
+	    }catch (Exception e) {
+	    	manageException(conn, F_CODE, this, e, getModel());
+		} finally {
+			ConnectionUtil.close(conn);
+		}
+		return result;
+	}
 
 
 	//TODO method gotoMyCartAdd() สำหรับแสดงรายการสินค้าที่อยู่ใน session โดยกำหนดให้ default จำนวนรายการเป็น 1 จำนวน
-
+	public String gotoMyCartAdd() throws Exception {
+		String result = null;
+	    Connection conn = null;
+	    try {
+	    	//1.สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
+	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
+	        
+	        //2.ตรวจสอบสิทธิ์ หน้าเพิ่ม
+	        result = manageGotoAdd(conn, model);
+	        
+	    }catch (Exception e) {
+	    	manageException(conn, F_CODE, this, e, getModel());
+		} finally {
+			ConnectionUtil.close(conn);
+		}
+		return result;
+	}
 
 	//TODO method add() สำหรับทำรายการสั่งซื้อ
-
+	@Override
+	public String add() throws AuthorizationException {
+		String result = null;
+	    Connection conn = null;
+	    try {
+	    	//1.สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
+	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
+	        
+	        //2.ตรวจสอบสิทธิ์การใช้งาน และจัดการเงือนไข
+	        result = manageAdd(conn, model);
+	        
+	        //3.บันทึกข้อมูล
+	        CustomerSaleManager manager = new CustomerSaleManager(conn, null, getLocale());
+	        manager.add(model.getCustomerSale());
+	        
+	        //4.เคลียร์ค่าหน้าเพิ่มทั้งหมด
+	        model.setCustomerSale(new CustomerSale());
+	        
+	    }catch (Exception e) {
+	    	manageException(conn, F_CODE, this, e, getModel());
+		} finally {
+			ConnectionUtil.close(conn);
+		}
+		return result;
+	}
 }

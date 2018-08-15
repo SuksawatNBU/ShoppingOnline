@@ -5,12 +5,12 @@
 <html>
 <head>
 <script type="text/javascript">
-function sf(){
-
-}
+	function sf(){
+		
+	}
 </script>
 </head>
 <body>
-	<p>kkkk</p>
+	
 </body>
 </html>

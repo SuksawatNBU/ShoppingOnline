@@ -1,6 +1,7 @@
 package com.somapait.shoppingonline.core.shopping.customers.sale.service;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -9,6 +10,8 @@ import com.somapait.common.CommonUser;
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSale;
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleSearch;
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleSearchCriteria;
+
+import util.log.LogUtil;
 
 /**
  * @description Class สำหรับจัดการการทำงานต่างๆ แยกตาม module
@@ -26,8 +29,26 @@ public class CustomerSaleManager extends AbstractManager<CustomerSaleSearchCrite
 
 	@Override
 	public List<CustomerSaleSearch> search(CustomerSaleSearchCriteria criteria) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public List<CustomerSaleSearch> searchProductList(CustomerSaleSearchCriteria criteria) throws Exception {
+		List<CustomerSaleSearch> listResult = new ArrayList<CustomerSaleSearch>();
+		try{
+			criteria.setTotalResult(service.countData(conn, criteria, user, locale));
+			LogUtil.SELECTOR.debug("COUNT DATA [" + criteria.getTotalResult() + "] record.");
+			
+			if (criteria.getTotalResult() == 0) {
+				// Nothing
+			} else {
+	        	// ค้นหาข้อมูล
+	        	listResult = service.searchProductList(conn, criteria, user, locale);
+	        }
+		}catch (Exception e) {
+			LogUtil.SELECTOR.debug("Eror : ",e);
+			throw e;
+		}
+		return listResult;
 	}
 
 	@Override

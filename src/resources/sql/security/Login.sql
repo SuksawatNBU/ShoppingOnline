@@ -5,7 +5,6 @@ Description :
 checkDupLogin {
 	SELECT COUNT(1) AS TOT
 	FROM USER
-	WHERE ACTIVE = 'Y'
 	WHERE LOGIN_NAME = %s
 	AND PASSWORD = %s
 }
