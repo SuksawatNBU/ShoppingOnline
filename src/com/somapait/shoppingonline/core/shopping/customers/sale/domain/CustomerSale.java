@@ -1,5 +1,6 @@
 package com.somapait.shoppingonline.core.shopping.customers.sale.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.somapait.shoppingonline.core.shopping.domain.OrderDetail;
@@ -13,9 +14,8 @@ import com.somapait.shoppingonline.core.shopping.domain.Product;
 public class CustomerSale extends Product{
 
 	private static final long serialVersionUID = -889683554233993176L;
-	
-	private OrderMain orderMain;
-	private List<OrderDetail> listOrderDetail;
+	private OrderMain orderMain = new OrderMain();
+	private List<OrderDetail> listOrderDetail = new ArrayList<OrderDetail>();
 
 	public OrderMain getOrderMain() {
 		return orderMain;
@@ -30,6 +30,5 @@ public class CustomerSale extends Product{
 	public void setListOrderDetail(List<OrderDetail> listOrderDetail) {
 		this.listOrderDetail = listOrderDetail;
 	}
-	
 	
 }

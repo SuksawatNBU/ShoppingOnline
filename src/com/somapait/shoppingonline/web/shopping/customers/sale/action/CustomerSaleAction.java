@@ -1,8 +1,14 @@
 package com.somapait.shoppingonline.web.shopping.customers.sale.action;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.ServletActionContext;
+
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ModelDriven;
 import com.somapait.common.CommonAction;
 import com.somapait.domain.Transaction;
@@ -13,6 +19,7 @@ import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerS
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleModel;
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleSearch;
 import com.somapait.shoppingonline.core.shopping.customers.sale.service.CustomerSaleManager;
+import com.somapait.shoppingonline.core.shopping.domain.Product;
 
 import util.database.ConnectionProvider;
 import util.database.ConnectionUtil;
@@ -31,6 +38,13 @@ public class CustomerSaleAction extends CommonAction implements ModelDriven<Cust
 	
 	@Override
 	public CustomerSaleModel getModel() {
+		if(model.getListResult() == null){
+			try {
+				searchProductList();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		return model;
 	}
 
@@ -123,23 +137,29 @@ public class CustomerSaleAction extends CommonAction implements ModelDriven<Cust
 		String result = null;
 	    Connection conn = null;
 	    try {	
-	    	//1.สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
+	    	//1. สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
 	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
 	        
-	        //2.ตรวจสอบสิทธิ์การใช้งาน และจัดการเงือนไขที่ใช้ในการค้นหา
+	        //2. ตรวจสอบสิทธิ์การใช้งาน และจัดการเงือนไขที่ใช้ในการค้นหา
 	        result = manageSearch(conn, model, model.getCriteria(), null);
 	        
-	        //3.การค้นหา
+	        //3. get parameter in url 
+	        HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+	        model.getCriteria().setTypeId(request.getParameter("typeId"));
+
+	        //4. การค้นหา
 	        CustomerSaleManager manager = new CustomerSaleManager(conn, null, getLocale());
 	        List<CustomerSaleSearch> listResult = manager.searchProductList(model.getCriteria());
 	        model.setListResult(listResult);
 	        
-	        //4.จัดการผลลัพธ์และข้อความ ถ้าไม่พบข้อมูล
+	        //5.จัดการผลลัพธ์และข้อความ ถ้าไม่พบข้อมูล
 	        manageSearchResult(model, listResult);
 	        
 	    }catch (Exception e) {
+	    	//6.
 	    	manageException(conn, F_CODE, this, e, getModel());
 		} finally {
+			//7. 
 			ConnectionUtil.close(conn);
 		}
 		return result;
@@ -155,7 +175,11 @@ public class CustomerSaleAction extends CommonAction implements ModelDriven<Cust
 	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
 	        
 	        //2.ตรวจสอบสิทธิ์การใช้งาน และจัดการเงือนไข
-	        result = manageSearch(conn, model, model.getCriteria(), null);
+	        result = manageAdd(conn, model);
+	        
+	        //3. ค้นหาข้อมูล ตาม id
+	        CustomerSaleManager manager = new CustomerSaleManager(conn, null, getLocale());
+	        Product product = manager.searchProductById(model.getCustomerSale().getId());
 	        
 	    }catch (Exception e) {
 	    	manageException(conn, F_CODE, this, e, getModel());
@@ -165,7 +189,6 @@ public class CustomerSaleAction extends CommonAction implements ModelDriven<Cust
 		return result;
 	}
 
-
 	//TODO method gotoMyCartAdd() สำหรับแสดงรายการสินค้าที่อยู่ใน session โดยกำหนดให้ default จำนวนรายการเป็น 1 จำนวน
 	public String gotoMyCartAdd() throws Exception {
 		String result = null;
@@ -174,8 +197,10 @@ public class CustomerSaleAction extends CommonAction implements ModelDriven<Cust
 	    	//1.สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
 	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
 	        
-	        //2.ตรวจสอบสิทธิ์ หน้าเพิ่ม
+	        //2.
 	        result = manageGotoAdd(conn, model);
+	        
+	        /*List<CustomerSale> customerSale = new ArrayList<CustomerSale>();*/
 	        
 	    }catch (Exception e) {
 	    	manageException(conn, F_CODE, this, e, getModel());
@@ -197,9 +222,10 @@ public class CustomerSaleAction extends CommonAction implements ModelDriven<Cust
 	        //2.ตรวจสอบสิทธิ์การใช้งาน และจัดการเงือนไข
 	        result = manageAdd(conn, model);
 	        
-	        //3.บันทึกข้อมูล
+	        //3.บันทึกข้อมูล และ retuen เลขที่ใบสั่งซื้อ
 	        CustomerSaleManager manager = new CustomerSaleManager(conn, null, getLocale());
-	        manager.add(model.getCustomerSale());
+	        int orderNumber = manager.add(model.getCustomerSale());
+	        model.getCustomerSale().getOrderMain().setNo(String.valueOf(orderNumber));
 	        
 	        //4.เคลียร์ค่าหน้าเพิ่มทั้งหมด
 	        model.setCustomerSale(new CustomerSale());

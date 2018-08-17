@@ -23,6 +23,8 @@ public class Product extends CommonDomain{
 	private String seq;
 	private String imagePath;
 	
+	private String image;
+	
 	public String getCode() {
 		return code;
 	}
@@ -83,5 +85,12 @@ public class Product extends CommonDomain{
 	public void setId(String id) {
 		this.id = id;
 	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
 	
 }

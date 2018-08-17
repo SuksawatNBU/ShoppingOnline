@@ -87,10 +87,10 @@
 					<div id="container">
 						<div id="leftPanel" class="leftPanel">
 							<ul>
-								<li><a href='#'>Product</a></li>
-								<ul><li><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action'>Dress</a></li></ul>
-								<ul><li><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action'>Shoes</a></li></ul>
-								<ul><li><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action'>Bags</a></li></ul>
+								<li><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action'>Product</a></li>
+								<ul><li><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action?typeId=1'>Dress</a></li></ul>
+								<ul><li><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action?typeId=2'>Shoes</a></li></ul>
+								<ul><li><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action?typeId=3'>Bags</a></li></ul>
 								<ul><li><a href='/shoppingonline/jsp/shopping/gotoMyCartAddCustomerSale.action'>My Cart</a></li></ul>
 								<s:if test="%{#USER.active == 'Y'}">
 									<ul><li><a href='/shoppingonline/jsp/shopping/gotoOrderListAdminSale.action'>Order List</a></li></ul>

@@ -69,11 +69,11 @@ public class AdminSaleDAO  extends AbstractDAO<AdminSaleSearchCriteria, AdminSal
 		List<AdminSaleSearch> listResult = new ArrayList<AdminSaleSearch>();
 		
 		int paramIndex = 0;
-		Object[] params = new Object[4];
+		Object[] params = new Object[2];
 		params[paramIndex++] = StringUtil.replaceSpecialString(criteria.getNo(), dbType, ResultType.NULL);
 		params[paramIndex++] = StringUtil.replaceSpecialString(criteria.getShip(), dbType, ResultType.NULL);
-		params[paramIndex++] = criteria.getStart() - 1;
-        params[paramIndex++] = criteria.getLinePerPage();
+//		params[paramIndex++] = criteria.getStart() - 1;
+//        params[paramIndex++] = criteria.getLinePerPage();
         
 		String sql = SQLUtil.getSQLString(schemas
                 , getSqlPath().getClassName()

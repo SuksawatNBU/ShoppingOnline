@@ -9,30 +9,56 @@
 
 <script type="text/javascript">
 	function sf(){
-		
+		if(jQuery("[name='criteria.criteriaKey']").val() != ""){
+            searchAjax();
+        }
 	}
 	
-	function seach() {
-		
+	function search() {
+		document.getElementsByName('criteria.criteriaKey')[0].value = '';
+        searchAjax()
 	}
 	
-	function clearSeach() {
-		
+	function clearPage() {
+		submitPage("<s:url value='/jsp/shopping/initAdminSale.action' />");
 	}
 	
 	function searchAjax(){
 		var aOption = {
 			divResultId: "div_datatable",
 			tableId: "tableResult",
-			urlSearch: "<s:url value='/jsp/tutorial/searchEmployee.action' />",
-			pk: "product.id"
+			checkbox:"Y",
+			urlSearch: "<s:url value='/jsp/shopping/searchAdminSale.action' />",
+			urlEdit: { url: "<s:url value='/jsp/shopping/gotoEditAdminSale.action' />" },
+            urlView: { url: "<s:url value='/jsp/shopping/gotoViewAdminSale.action' />" },
+            pk: "adminSale.id",
+            createdRowFunc: "manageRow"
 		};
 		
 		var colData = [
-			
+			{ data: null,		  class: "order",  orderable: false, "width":"50px"},
+			{ data: null,		  class: "d_checkbox center", orderable: false, "width":"30px", defaultContent: ""},
+			{ data: "no",		  class: "center", orderable: false, "width":"100px"},
+			{ data: "orderDate",  class: "center", orderable: false, "width":"100px"},
+			{ data: "fullName",	  class: "left",   orderable: false, "width":"200px"},
+			{ data: "totalPrice", class: "right",  orderable: false, "width":"100px"},
+			{ data: "ship",		  class: "left",   orderable: false, "width":"100px"},
+			{ data: null,		  class: "center", orderable: false, "width":"50px", defaultContent: ""},
+			{ data: "trackingNo", class: "center", orderable: false, "width":"50px"},
+			{ data: "cancel",	  class: "center", orderable: false, "width":"50px"},
 		];
 		
 		dataTable("<%=request.getContextPath()%>", colData, aOption);
+    }
+	
+	function manageRow(row, data) {
+		/* var htmlIconEdit = "";
+		if(data.workStatus == "เลิกจ้าง"){
+			htmlIconEdit = jQuery("#tempIconEditDisable").html();
+		}else {
+			htmlIconEdit = jQuery("#tempIconEditEnable").html();
+		}
+		jQuery(row).find("td").eq(2).html(htmlIconEdit); */
     }
 	
 </script>
@@ -40,7 +66,7 @@
 </head>
 <body>
 	
-	<s:form id="searchForm" name="searchForm" method="post" namespace="/jsp/shopping" action="initAction" cssClass="margin-zero" onsubmit="return false;">
+	<s:form id="searchForm" name="searchForm" method="post" namespace="/jsp/shopping"  cssClass="margin-zero" onsubmit="return false;">
 		
 	    <!------------------------------------- Criteria ------------------------------------->
 	    <div id="divSerachForm" class="CRITERIA CRITERIA_1280">
@@ -86,16 +112,15 @@
 				</table>
 				
 				<!-- BUTTON SEARCH -->
-				<button type="button" onclick="seach()">Seach</button>
-				<button type="button" onclick="clearSeach()">Clear</button>
-				
+				<input type="button" onclick="search()" value="Seach">
+				<input type="button" onclick="clearPage()" value="Clear">
 			</div>
 		</div>
 	    
 	    <!------------------------------------- Result ------------------------------------->
 	    <div class="RESULT">
 		    <div id="div_datatable" class="ex_highlight_row" style="display: none;">
-		    	<table class="display" id="tableResult">
+		    	<table id="tableResult" class="display">
 		    		<thead>
 		    			<tr>
 		    				<th><s:text name="shopping.no" /></th>
@@ -121,6 +146,11 @@
 	   	</div>
 	   	
 	   	<!------------------------------------- BUTTON ------------------------------------->
+	   	<s:hidden name="criteria.criteriaKey" />
+	    <s:hidden name="P_CODE"/>
+	    <s:hidden name="F_CODE"/>
+	    <s:hidden name="page"/>
+	    <s:hidden name="adminSale.id" />
 	    <s:token/>
     
 	</s:form>

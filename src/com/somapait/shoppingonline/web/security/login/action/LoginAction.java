@@ -98,7 +98,7 @@ public class LoginAction extends CommonAction implements ModelDriven<LoginModel>
 	}
 
 	public String logout(){
-		SessionUtil.remove("");
+		SessionUtil.remove(CommonUser.DEFAULT_SESSION_ATTRIBUTE);
 		return ReturnType.INIT.getResult();
 	}
 

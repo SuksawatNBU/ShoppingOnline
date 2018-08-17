@@ -33,14 +33,15 @@ public class AdminSaleAction extends CommonAction implements ModelDriven<AdminSa
 	public String init() throws AuthorizationException {
 		Connection conn = null;
 		try {
-			
+			// สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
+	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
 		} catch (Exception e) {
 			
 		}finally {
 			getComboForSearch(conn);
 			ConnectionUtil.close(conn);
 		}
-		return null;
+		return ReturnType.INIT.getResult();
 	}
 
 	@Override

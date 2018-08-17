@@ -22,8 +22,19 @@ public class CommonModel implements Serializable {
 	private String messagePopup;
 
 	public enum PageType {
-		SEARCH("search"), ADD("add"), EDIT("edit"), VIEW("view"), REPORT("report"), PRINT("print");
-
+		
+		SEARCH("search")
+		, ADD("add")
+		, EDIT("edit")
+		, VIEW("view")
+		, PRINT("print")
+		, REPORT("report")
+		, SEARCH_DIALOG("search_dialog")
+		, CHOOSE_DIALOG("choose_dialog")
+		, CONFIRM_ADD("confirm_add")
+		, CONFIRM_EDIT("confirm_edit")
+		;
+		
 		private String page;
 
 		private PageType(String page) {

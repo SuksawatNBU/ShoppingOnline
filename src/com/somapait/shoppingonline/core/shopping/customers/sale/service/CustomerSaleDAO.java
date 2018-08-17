@@ -17,6 +17,7 @@ import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerS
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleSearchCriteria;
 import com.somapait.shoppingonline.core.shopping.domain.OrderDetail;
 import com.somapait.shoppingonline.core.shopping.domain.OrderMain;
+import com.somapait.shoppingonline.core.shopping.domain.Product;
 
 import util.database.ConnectionUtil;
 import util.database.SQLUtil;
@@ -38,6 +39,8 @@ public class CustomerSaleDAO extends AbstractDAO<CustomerSaleSearchCriteria, Cus
 	@Override
 	protected int countData(Connection conn, CustomerSaleSearchCriteria criteria, CommonUser user, Locale locale) throws Exception {
 		int count = 0;
+		
+		System.out.println("dao --> criteria.getTypeId() :" + criteria.getTypeId());
 		
 		int paramIndex = 0;
 	    Object[] params = new Object[1];
@@ -73,7 +76,79 @@ public class CustomerSaleDAO extends AbstractDAO<CustomerSaleSearchCriteria, Cus
 	
 	@Override
 	protected CustomerSale searchById(Connection conn, String id, CommonUser user, Locale locale) throws Exception {
-		return null;
+		CustomerSale result = new CustomerSale();
+		
+		int paramIndex = 0;
+		Object[] params = new Object[1];
+		params[paramIndex++] = StringUtil.replaceSpecialString(id, dbType, ResultType.NULL);
+        
+		String sql = SQLUtil.getSQLString(schemas
+                , getSqlPath().getClassName()
+                , getSqlPath().getPath()
+                , "searchProductById"
+                , params);
+        LogUtil.SELECTOR.debug("SQL : " + sql);
+        
+        Statement stmt = null;
+        ResultSet rst = null;
+        try{
+        	stmt = conn.createStatement();
+            rst = stmt.executeQuery(sql);
+            while (rst.next()) {
+            	result.setId(StringUtil.nullToString(rst.getString("ID")));
+            	result.setCode(StringUtil.nullToString(rst.getString("CODE")));
+            	result.setProductDesc(StringUtil.nullToString(rst.getString("PRODUCT_DESC")));
+            	result.setPrice(StringUtil.nullToString(rst.getString("PRICE")));
+            	result.setStockNum(StringUtil.nullToString(rst.getString("STOCK_NUM")));
+            	result.setImage(StringUtil.nullToString(rst.getString("IMAGE")));
+            	result.setTypeId(StringUtil.nullToString(rst.getString("TYPE_ID")));
+            	result.setTypeDesc(StringUtil.nullToString(rst.getString("TYPE_DESC")));
+            	result.setSeq(StringUtil.nullToString(rst.getString("SEQ")));
+            }
+        }catch (Exception e) {
+        	throw e;
+		}finally {
+			ConnectionUtil.closeAll(rst, stmt);
+		}
+		return result;
+	}
+	
+	protected Product searchProductById(Connection conn, String id, CommonUser user, Locale locale) throws Exception {
+		Product result = new Product();
+		
+		int paramIndex = 0;
+		Object[] params = new Object[1];
+		params[paramIndex++] = StringUtil.replaceSpecialString(id, dbType, ResultType.NULL);
+        
+		String sql = SQLUtil.getSQLString(schemas
+                , getSqlPath().getClassName()
+                , getSqlPath().getPath()
+                , "searchProductById"
+                , params);
+        LogUtil.SELECTOR.debug("SQL : " + sql);
+        
+        Statement stmt = null;
+        ResultSet rst = null;
+        try{
+        	stmt = conn.createStatement();
+            rst = stmt.executeQuery(sql);
+            while (rst.next()) {
+            	result.setId(StringUtil.nullToString(rst.getString("ID")));
+            	result.setCode(StringUtil.nullToString(rst.getString("CODE")));
+            	result.setProductDesc(StringUtil.nullToString(rst.getString("PRODUCT_DESC")));
+            	result.setPrice(StringUtil.nullToString(rst.getString("PRICE")));
+            	result.setStockNum(StringUtil.nullToString(rst.getString("STOCK_NUM")));
+            	result.setImage(StringUtil.nullToString(rst.getString("IMAGE")));
+            	result.setTypeId(StringUtil.nullToString(rst.getString("TYPE_ID")));
+            	result.setTypeDesc(StringUtil.nullToString(rst.getString("TYPE_DESC")));
+            	result.setSeq(StringUtil.nullToString(rst.getString("SEQ")));
+            }
+        }catch (Exception e) {
+        	throw e;
+		}finally {
+			ConnectionUtil.closeAll(rst, stmt);
+		}
+		return result;
 	}
 
 	@Override
@@ -137,6 +212,8 @@ public class CustomerSaleDAO extends AbstractDAO<CustomerSaleSearchCriteria, Cus
             	result.setTypeDesc(StringUtil.nullToString(rst.getString("TYPE_DESC")));
             	result.setSeq(StringUtil.nullToString(rst.getString("SEQ")));
             	listResult.add(result);
+            	
+            	System.out.println("image : " + result.getImage());
             }
         }catch (Exception e) {
         	throw e;
@@ -146,18 +223,47 @@ public class CustomerSaleDAO extends AbstractDAO<CustomerSaleSearchCriteria, Cus
 		return listResult;
 	}
 	
+	protected boolean checkDupOrderNumber(Connection conn, String code) throws Exception {
+		
+		boolean checkDup = false;
+		
+		int paramIndex = 0;
+		Object[] params = new Object[1];
+		params[paramIndex++] = StringUtil.replaceSpecialString(code, dbType, ResultType.NULL);
+		
+		String sql = SQLUtil.getSQLString(schemas
+                , getSqlPath().getClassName()
+                , getSqlPath().getPath()
+                , "checkDupCode"
+                , params);
+        LogUtil.SELECTOR.debug("SQL : " + sql);
+        
+        Statement stmt = null;
+        ResultSet rst = null;
+        try{
+        	stmt = conn.createStatement();
+            rst = stmt.executeQuery(sql);
+            if (rst.next()) {
+            	if(rst.getLong(1) != 0){
+            		checkDup = true;
+            	}
+            }
+        }catch (Exception e) {
+        	throw e;
+		}finally {
+			ConnectionUtil.closeAll(rst, stmt);
+		}
+		return checkDup;
+	}
+	
 	protected int addOrderMain(Connection conn, OrderMain obj, CommonUser user, Locale locale) throws Exception {
 		int id = 0;
 		int paramIndex = 0;
-		Object[] params = new Object[8];
+		Object[] params = new Object[4];
+		params[paramIndex++] = StringUtil.replaceSpecialString(obj.getNo(), dbType, ResultType.NULL);
 		params[paramIndex++] = StringUtil.replaceSpecialString(obj.getTotalPrice(), dbType, ResultType.NULL);
-		params[paramIndex++] = StringUtil.replaceSpecialString(user.getUserId(), dbType, ResultType.NULL);
+		params[paramIndex++] = StringUtil.replaceSpecialString(obj.getUserId(), dbType, ResultType.NULL);
 		params[paramIndex++] = StringUtil.replaceSpecialString(obj.getOrderDate(), dbType, ResultType.NULL);
-		params[paramIndex++] = StringUtil.replaceSpecialString(obj.getShip(), dbType, ResultType.NULL);
-		params[paramIndex++] = StringUtil.replaceSpecialString(obj.getShipDate(), dbType, ResultType.NULL);
-		params[paramIndex++] = StringUtil.replaceSpecialString(obj.getTrackingNo(), dbType, ResultType.NULL);
-		params[paramIndex++] = StringUtil.replaceSpecialString(obj.getCancel(), dbType, ResultType.NULL);
-		params[paramIndex++] = StringUtil.replaceSpecialString(obj.getNote(), dbType, ResultType.NULL);
         
 		String sql = SQLUtil.getSQLString(schemas
                 , getSqlPath().getClassName()
@@ -198,6 +304,36 @@ public class CustomerSaleDAO extends AbstractDAO<CustomerSaleSearchCriteria, Cus
 		}
         
 		return id;
+	}
+	
+	protected int searchOrderNumberById(Connection conn, String id) throws Exception {
+		int orderNumber = 0;
+		
+		int paramIndex = 0;
+		Object[] params = new Object[1];
+		params[paramIndex++] = StringUtil.replaceSpecialString(id, dbType, ResultType.NULL);
+        
+		String sql = SQLUtil.getSQLString(schemas
+                , getSqlPath().getClassName()
+                , getSqlPath().getPath()
+                , "searchNoById"
+                , params);
+        LogUtil.SELECTOR.debug("SQL : " + sql);
+        
+        Statement stmt = null;
+        ResultSet rst = null;
+        try{
+        	stmt = conn.createStatement();
+            rst = stmt.executeQuery(sql);
+            if (rst.next()) {
+            	orderNumber = Integer.parseInt(rst.getString("NO"));
+            }
+        }catch (Exception e) {
+        	throw e;
+		}finally {
+			ConnectionUtil.closeAll(rst, stmt);
+		}
+		return orderNumber;
 	}
 	
 	public int executeInsertStatement(Connection conn, String sql) throws Exception {

@@ -83,18 +83,17 @@ public class AdminSaleManager extends AbstractManager<AdminSaleSearchCriteria, A
 	}
 
 	public List<CommonSelectItem> getListShip(){
-		
 		List<CommonSelectItem> listShip = new ArrayList<CommonSelectItem>();
-		CommonSelectItem comm = new CommonSelectItem();
-		
 		try{
-			comm.setKey("1");
-			comm.setValue("ทดสอบ1");
-			listShip.add(comm);
+			CommonSelectItem comm1 = new CommonSelectItem();
+			comm1.setKey("Y");
+			comm1.setValue("จัดส่งแล้ว");
+			listShip.add(comm1);
 			
-			comm.setKey("2");
-			comm.setValue("ทดสอบ 2");
-			listShip.add(comm);
+			CommonSelectItem comm2 = new CommonSelectItem();
+			comm2.setKey("N");
+			comm2.setValue("ยังไม่ได้จัดส่ง");
+			listShip.add(comm2);
 		}catch (Exception e) {
 			
 		}

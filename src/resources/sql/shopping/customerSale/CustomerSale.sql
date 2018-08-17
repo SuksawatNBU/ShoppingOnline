@@ -20,13 +20,14 @@ searchProduct {
 		, P.PRODUCT_DESC
 		, P.PRICE
 		, P.STOCK_NUM
-		, CONCAT(PT.IMAGE_PATH, '\\', P.IMAGE_NAME) AS IMAGE
+		, CONCAT(PT.IMAGE_PATH, '', P.IMAGE_NAME) AS IMAGE
 		, PT.TYPE_ID
 		, PT.TYPE_DESC
 		, PT.SEQ
 	FROM PRODUCT P
 	INNER JOIN PRODUCT_TYPE PT ON P.TYPE_ID = PT.TYPE_ID
 	WHERE P.TYPE_ID = %s
+	ORDER BY P.CODE
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -40,14 +41,24 @@ searchProductById {
 		, P.PRODUCT_DESC
 		, P.PRICE
 		, P.STOCK_NUM
-		, P.IMAGE_NAME
+		, CONCAT(PT.IMAGE_PATH, '', P.IMAGE_NAME) AS IMAGE
 		, PT.TYPE_ID
 		, PT.TYPE_DESC
 		, PT.SEQ
-		, PT.IMAGE_PATH
 	FROM PRODUCT P
 	INNER JOIN PRODUCT_TYPE PT ON P.TYPE_ID = PT.TYPE_ID
-	WHERE P.ID = %s
+	WHERE P.TYPE_ID = %s
+	ORDER BY P.CODE
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL : ตรวจสอบค่าซ้ำ
+Description : 
+------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+checkDupCode {
+	SELECT COUNT(1) AS TOT
+	FROM ORDER_MAIN O
+	WHERE O.NO = %s
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -56,37 +67,39 @@ Description :
 ------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 insertOrderMain {
 	INSERT INTO ORDER_MAIN (
-	  TOTAL_PRICE
-	  ,USER_ID
-	  ,ORDER_DATE
-	  ,SHIP
-	  ,SHIP_DATE
-	  ,TRACKING_NO
-	  ,CANCEL
-	  ,NOTE
+	  	NO
+		,TOTAL_PRICE
+	  	,USER_ID
+	  	,ORDER_DATE
 	) VALUES (
 		%s
-	  , %s
-	  , %s
-	  , %s
-	  , %s
-	  , %s
-	  , %s
-	  , %s
+	  	, %s
+	  	, %s
+	  	, %s
 	 )
 }
 
 insertOrderDetail {
-	INSERT INTO ORDER_DETIL(
-	  PRODUCT_ID
-	  ,TOTAL_NUM
-	  ,TOTAL_PRICE
-	  ,ORDER_ID
+	INSERT INTO ORDER_DETAIL(
+		PRODUCT_ID
+	  	,TOTAL_NUM
+	  	,TOTAL_PRICE
+	  	,ORDER_ID
 	) VALUES (
 		%s
-	  , %s
-	  , %s
-	  , %s
+	  	, %s
+	  	, %s
+	  	, %s
 	)
 }
 
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL : ค้นเลขที่ใบสั่งซื้อ
+Description : 
+------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+searchNoById {
+	SELECT
+		NO
+	FROM ORDER_MAIN
+	WHERE ID = %s
+}
