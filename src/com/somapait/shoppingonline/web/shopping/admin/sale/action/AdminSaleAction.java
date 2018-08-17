@@ -27,7 +27,6 @@ public class AdminSaleAction extends CommonAction implements ModelDriven<AdminSa
 	private static final long serialVersionUID = -1427160350963299925L;
 	
 	private AdminSaleModel model = new AdminSaleModel();
-	
 
 	@Override
 	public String init() throws AuthorizationException {
@@ -41,7 +40,7 @@ public class AdminSaleAction extends CommonAction implements ModelDriven<AdminSa
 			getComboForSearch(conn);
 			ConnectionUtil.close(conn);
 		}
-		return ReturnType.INIT.getResult();
+		return ReturnType.SEARCH.getResult();
 	}
 
 	@Override
@@ -75,9 +74,13 @@ public class AdminSaleAction extends CommonAction implements ModelDriven<AdminSa
 	        //2.ตรวจสอบสิทธิ์การใช้งาน และจัดการเงือนไขที่ใช้ในการค้นหา
 	        result = manageSearch(conn, model, model.getCriteria(), null);
 	        
+	        System.out.println("No   : " + model.getCriteria().getNo());
+	        System.out.println("Ship : " + model.getCriteria().getShip());
+	        
 	        //3.การค้นหา
 	        AdminSaleManager manager = new AdminSaleManager(conn, null, getLocale());
 	        List<AdminSaleSearch> listResult = manager.search(model.getCriteria());
+	        model.setListResult(listResult);
 	        
 	        //4.จัดการผลลัพธ์และข้อความ ถ้าไม่พบข้อมูล
 	        manageSearchResult(model, listResult);
@@ -164,6 +167,4 @@ public class AdminSaleAction extends CommonAction implements ModelDriven<AdminSa
 		}
 		return result;
 	}
-
-	
 }

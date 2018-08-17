@@ -8,7 +8,7 @@ countData {
 	FROM ORDER_MAIN O
 	INNER JOIN USER U ON O.USER_ID = U.USER_ID
 	WHERE O.NO = %s
-	, O.SHIP = %s
+	AND O.SHIP = %s
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -24,13 +24,14 @@ searchOrderMain {
 		, O.SHIP
 		, O.SHIP_DATE
 		, O.TRACKING_NO
+		, O.CANCEL
 		, U.USER_ID
 		, U.FIRST_NAME
 		, U.LAST_NAME
 	FROM ORDER_MAIN O
 	INNER JOIN USER U ON O.USER_ID = U.USER_ID
 	WHERE O.NO = %s
-	, O.SHIP = %s
+	AND O.SHIP = %s
 }
 
 searchOrderDetail {

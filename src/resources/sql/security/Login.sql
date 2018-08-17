@@ -16,6 +16,7 @@ Description :
 searchUserLogin {
 	SELECT
 	  USER_ID
+	  , FIRST_NAME
 	  , CONCAT(FIRST_NAME, ' ', LAST_NAME) AS FULLNAME
 	  , ADMIN
 	FROM USER

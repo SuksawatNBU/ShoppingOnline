@@ -15,8 +15,6 @@ public class CustomerSaleModel extends CommonModel {
 	private CustomerSale customerSale = new CustomerSale();
 	private List<CustomerSaleSearch> listResult = new ArrayList<CustomerSaleSearch>();
 	
-	
-	
 //	Getter and Setter ---------------------------------------------------------------------
 	@Override
 	public CustomerSaleSearchCriteria getCriteria() {

@@ -40,8 +40,6 @@ public class CustomerSaleDAO extends AbstractDAO<CustomerSaleSearchCriteria, Cus
 	protected int countData(Connection conn, CustomerSaleSearchCriteria criteria, CommonUser user, Locale locale) throws Exception {
 		int count = 0;
 		
-		System.out.println("dao --> criteria.getTypeId() :" + criteria.getTypeId());
-		
 		int paramIndex = 0;
 	    Object[] params = new Object[1];
 	    params[paramIndex++] = StringUtil.replaceSpecialString(criteria.getTypeId(), dbType, ResultType.NULL);

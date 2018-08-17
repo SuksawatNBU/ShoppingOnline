@@ -40,7 +40,8 @@ public class AdminSaleDAO  extends AbstractDAO<AdminSaleSearchCriteria, AdminSal
 		Object[] params = new Object[2];
 		params[paramIndex++] = StringUtil.replaceSpecialString(criteria.getNo(), dbType, ResultType.NULL);
 		params[paramIndex++] = StringUtil.replaceSpecialString(criteria.getShip(), dbType, ResultType.NULL);
-        
+		
+		schemas.clear();
 		String sql = SQLUtil.getSQLString(schemas
                 , getSqlPath().getClassName()
                 , getSqlPath().getPath()
@@ -96,6 +97,7 @@ public class AdminSaleDAO  extends AbstractDAO<AdminSaleSearchCriteria, AdminSal
             	result.setShip(StringUtil.nullToString(rst.getString("SHIP")));
             	result.setShipDate(StringUtil.nullToString(rst.getString("SHIP_DATE")));
             	result.setTrackingNo(StringUtil.nullToString(rst.getString("TRACKING_NO")));
+            	result.setCancel(StringUtil.nullToString(rst.getString("CANCEL")));
             	result.setUserId(StringUtil.nullToString(rst.getString("USER_ID")));
             	result.setFullName(StringUtil.nullToString(rst.getString("FIRST_NAME")) + " " + StringUtil.nullToString(rst.getString("LAST_NAME")));
             	listResult.add(result);

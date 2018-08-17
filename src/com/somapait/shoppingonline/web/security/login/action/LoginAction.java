@@ -59,10 +59,10 @@ public class LoginAction extends CommonAction implements ModelDriven<LoginModel>
 		
 		//1. ตรวจสอบ captcha
 		String sessionCaptcha = (String) ServletActionContext.getRequest().getSession().getAttribute(CaptchaImageServlet.DEFAULT_SESSION_ATTRIBUTE);
-		/*if(!model.getCaptcha().equals(sessionCaptcha)){
+		if(!model.getCaptcha().equals(sessionCaptcha)){
 			setMessage(MessageType.WARING, "กรุณากรอกข้อมูลให้ตรงกับภาพ", ResultType.BASIC);
-			return result;
-		}*/
+			/*return result;*/
+		}
 		
 		Connection conn = null;
 		try {

@@ -1,7 +1,6 @@
 package com.somapait.shoppingonline.web.shopping.customers.sale.action;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +18,7 @@ import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerS
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleModel;
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleSearch;
 import com.somapait.shoppingonline.core.shopping.customers.sale.service.CustomerSaleManager;
+import com.somapait.shoppingonline.core.shopping.domain.OrderProductCart;
 import com.somapait.shoppingonline.core.shopping.domain.Product;
 
 import util.database.ConnectionProvider;
@@ -33,6 +33,7 @@ import util.log.LogUtil;
 public class CustomerSaleAction extends CommonAction implements ModelDriven<CustomerSaleModel>, InterfaceAction{
 
 	private static final long serialVersionUID = -1195418747257577141L;
+	public static final String DEFAULT_SESSION_ATTRIBUTE_ORDER = "order";
 	
 	private CustomerSaleModel model = new CustomerSaleModel();
 	
@@ -175,11 +176,19 @@ public class CustomerSaleAction extends CommonAction implements ModelDriven<Cust
 	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
 	        
 	        //2.ตรวจสอบสิทธิ์การใช้งาน และจัดการเงือนไข
-	        result = manageAdd(conn, model);
+	        manageAdd(conn, model);
+	        result = ReturnType.SEARCH.getResult();
 	        
 	        //3. ค้นหาข้อมูล ตาม id
 	        CustomerSaleManager manager = new CustomerSaleManager(conn, null, getLocale());
 	        Product product = manager.searchProductById(model.getCustomerSale().getId());
+	        
+	        System.out.println("id : " + model.getCustomerSale().getId());
+	        
+	        OrderProductCart.put(DEFAULT_SESSION_ATTRIBUTE_ORDER, product);
+	        
+	        Product product2 = (Product) OrderProductCart.get(DEFAULT_SESSION_ATTRIBUTE_ORDER);
+	        System.out.println("id-Session : " + product2.getId());
 	        
 	    }catch (Exception e) {
 	    	manageException(conn, F_CODE, this, e, getModel());

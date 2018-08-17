@@ -1,26 +1,27 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Insert title here</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
-	
-	<s:include value="/jsp/shopping/admin/sale/include/ja-css.jsp"/>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+
+<s:include value="/jsp/shopping/admin/sale/include/ja-css.jsp"/>
 
 </head>
 <body>
 	
-	<s:form id="searchForm" name="searchForm" method="post" namespace="/jsp/shopping" action="initAdminSale">
+	<s:form>
 		
 	    <!------------------------------------- Criteria ------------------------------------->
 		<div id="div_criteria">
 			<table width="100%">
 				<tr>
 					<td align="right"><label for="criteria_no" ><s:text name="shopping.orderNumber" /></label></td>
-					<td><s:textfield id="criteria_no" name="criteria.no" class="form-control" /></td>
+					<td><s:textfield id="criteria_no" name="criteria.no" /></td>
 					<td align="right"><s:label for="criteria_ship"><s:text name="shopping.ship" /></s:label></td>
 					<td><s:select id="criteria_ship" name="criteria.ship" list="listShip"  headerKey="" headerValue="ทั้งหมด" listKey="key" listValue="value" cssClass ="combox"/></td>
 				</tr>
@@ -112,7 +113,10 @@
 	  	</div>
 	   	
 	   	<!------------------------------------- BUTTON ------------------------------------->
-	   	<div style="display: ;"><s:include value="/jsp/template/hiddenSearchForDatatable.jsp" /></div>
+	   	<s:hidden name="criteria.criteriaKey" />
+	    <s:hidden name="P_CODE"/>
+	    <s:hidden name="F_CODE"/>
+	    <s:hidden name="page"/>
 	    <s:hidden name="adminSale.id" />
 	    <s:token/>
     

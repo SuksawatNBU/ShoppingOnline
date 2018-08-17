@@ -14,7 +14,7 @@ public class AdminSaleModel extends CommonModel{
 //	Data Type  ----------------------------------------------------------------------------
 	private AdminSaleSearchCriteria criteria = new AdminSaleSearchCriteria();
 	private AdminSale adminSale = new AdminSale();
-	
+	private List<AdminSaleSearch> listResult = new ArrayList<AdminSaleSearch>();
 	private List<CommonSelectItem> listShip = new ArrayList<CommonSelectItem>();
 	
 	
@@ -39,6 +39,12 @@ public class AdminSaleModel extends CommonModel{
 	}
 	public void setListShip(List<CommonSelectItem> listShip) {
 		this.listShip = listShip;
+	}
+	public List<AdminSaleSearch> getListResult() {
+		return listResult;
+	}
+	public void setListResult(List<AdminSaleSearch> listResult) {
+		this.listResult = listResult;
 	}
 	
 	

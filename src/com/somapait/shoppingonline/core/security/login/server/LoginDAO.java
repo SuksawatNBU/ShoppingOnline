@@ -52,6 +52,7 @@ public class LoginDAO {
 			
 			if (rst.next()) {
 				result.setUserId(StringUtil.nullToString(rst.getString("USER_ID")));
+				result.setUserName(StringUtil.nullToString(rst.getString("FIRST_NAME")));
 				result.setFullName(StringUtil.nullToString(rst.getString("FULLNAME")));
 				result.setActive(StringUtil.nullToString(rst.getString("ADMIN")));
 			 }

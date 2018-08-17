@@ -92,11 +92,10 @@
 								<ul><li><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action?typeId=2'>Shoes</a></li></ul>
 								<ul><li><a href='/shoppingonline/jsp/shopping/searchProductListCustomerSale.action?typeId=3'>Bags</a></li></ul>
 								<ul><li><a href='/shoppingonline/jsp/shopping/gotoMyCartAddCustomerSale.action'>My Cart</a></li></ul>
-								<s:if test="%{#USER.active == 'Y'}">
+								<s:if test='%{<s:property value="#session.user.active" /> == "Y"}'>
 									<ul><li><a href='/shoppingonline/jsp/shopping/gotoOrderListAdminSale.action'>Order List</a></li></ul>
 								</s:if>
 								<s:else>
-									<s:property value="USER.active" />
 									<ul><li><a href='/shoppingonline/jsp/shopping/gotoOrderListAdminSale.action'>Order List</a></li></ul>
 								</s:else>
 							</ul>

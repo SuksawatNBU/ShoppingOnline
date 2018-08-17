@@ -17,7 +17,4 @@ public class AdminSaleSearch extends OrderMain {
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-	
-	
-
 }

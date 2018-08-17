@@ -4,9 +4,6 @@ import java.io.Serializable;
 
 public class OrderMain implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3963488389778972640L;
 	
 	private String id;
