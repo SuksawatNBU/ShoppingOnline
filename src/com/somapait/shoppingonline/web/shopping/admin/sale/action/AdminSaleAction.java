@@ -9,6 +9,7 @@ import com.somapait.domain.Transaction;
 import com.somapait.exception.AuthorizationException;
 import com.somapait.interfaces.InterfaceAction;
 import com.somapait.shoppingonline.core.config.parameter.domain.DBLookup;
+import com.somapait.shoppingonline.core.shopping.admin.sale.domain.AdminSale;
 import com.somapait.shoppingonline.core.shopping.admin.sale.domain.AdminSaleModel;
 import com.somapait.shoppingonline.core.shopping.admin.sale.domain.AdminSaleSearch;
 import com.somapait.shoppingonline.core.shopping.admin.sale.service.AdminSaleManager;
@@ -74,9 +75,6 @@ public class AdminSaleAction extends CommonAction implements ModelDriven<AdminSa
 	        //2.ตรวจสอบสิทธิ์การใช้งาน และจัดการเงือนไขที่ใช้ในการค้นหา
 	        result = manageSearch(conn, model, model.getCriteria(), null);
 	        
-	        System.out.println("No   : " + model.getCriteria().getNo());
-	        System.out.println("Ship : " + model.getCriteria().getShip());
-	        
 	        //3.การค้นหา
 	        AdminSaleManager manager = new AdminSaleManager(conn, null, getLocale());
 	        List<AdminSaleSearch> listResult = manager.search(model.getCriteria());
@@ -108,20 +106,76 @@ public class AdminSaleAction extends CommonAction implements ModelDriven<AdminSa
 
 	@Override
 	public String edit() throws AuthorizationException {
-		// TODO Auto-generated method stub
-		return null;
+		
+	    return null;
 	}
 
 	@Override
 	public String gotoEdit() throws AuthorizationException {
-		// TODO Auto-generated method stub
-		return null;
+		String result = null;
+	    Connection conn = null;
+	    
+	    try {
+	        //1.สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
+	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
+	 
+	        //2.ตรวจสอบสิทธิ์ หน้าแก้ไข
+	        result = manageGotoEdit(conn, model);
+	 
+	        //3.ค้นหาข้อมูลผู้ใช้ ตาม id ที่เลือกมาจากหน้าจอ
+	        AdminSaleManager manager = new AdminSaleManager(conn, null, getLocale());
+	        AdminSale adminSale = manager.searchById(model.getAdminSale().getId());
+	        model.setAdminSale(adminSale);
+	        
+	        System.out.println("orderNo : " + adminSale.getOrderMain().getNo());
+	 
+	        //4.กำหนดให้แสดง adminSale transaction
+	        showTransaction(model.getAdminSale().getTransaction());
+	        
+	    } catch (Exception e) {
+	        //5.จัดการ exception กรณีที่มี exception เกิดขึ้นในระบบ
+	    	manageException(conn, F_CODE, this, e, getModel());
+	    } finally {
+	        //6.Load combo ทั้งหมดที่ใช้ในหน้าแก้ไข
+	        getComboForAddEdit(conn);
+	         
+	        //7.Close connection หลังเลิกใช้งาน
+	        ConnectionUtil.close(conn);
+	    }
+	    return result;	//8.return "addEdit"
 	}
 
 	@Override
 	public String gotoView() throws AuthorizationException {
-		// TODO Auto-generated method stub
-		return null;
+		String result = null;
+	    Connection conn = null;
+	 
+	    try {
+	        //1.สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
+	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
+	 
+	        //2.ตรวจสอบสิทธิ์ หน้าแก้ไข
+	        result = manageGotoView(conn, model);
+	 
+	        //3.ค้นหาข้อมูลผู้ใช้ ตาม id ที่เลือกมาจากหน้าจอ
+	        AdminSaleManager manager = new AdminSaleManager(conn, null, getLocale());
+	        AdminSale adminSale = manager.searchById(model.getAdminSale().getId());
+	        model.setAdminSale(adminSale);
+	 
+	        //4.กำหนดให้แสดง adminSale transaction
+	        showTransaction(model.getAdminSale().getTransaction());
+	 
+	    } catch (Exception e) {
+	        //5.จัดการ exception กรณีที่มี exception เกิดขึ้นในระบบ
+	    	manageException(conn, F_CODE, this, e, getModel());
+	    } finally {
+	        //6.Load combo ทั้งหมดที่ใช้ในหน้าแก้ไข
+	        getComboForAddEdit(conn);
+	         
+	        //7.Close connection หลังเลิกใช้งาน
+	        ConnectionUtil.close(conn);
+	    }
+	    return result;	//8.return "addEdit"
 	}
 
 	@Override

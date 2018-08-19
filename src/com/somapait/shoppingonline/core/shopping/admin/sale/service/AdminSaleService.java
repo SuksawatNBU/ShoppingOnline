@@ -8,6 +8,7 @@ import java.util.Locale;
 import com.somapait.abstracts.AbstractService;
 import com.somapait.common.CommonUser;
 import com.somapait.shoppingonline.core.config.parameter.domain.SQLPath;
+import com.somapait.shoppingonline.core.shopping.admin.sale.domain.AdminSale;
 import com.somapait.shoppingonline.core.shopping.admin.sale.domain.AdminSaleSearch;
 import com.somapait.shoppingonline.core.shopping.admin.sale.domain.AdminSaleSearchCriteria;
 /**
@@ -43,6 +44,16 @@ public class AdminSaleService extends AbstractService {
 			throw e;
 		}
 		return listResult;
+	}
+	
+	protected AdminSale searchById(Connection conn, String id, CommonUser user, Locale locale) throws Exception {
+		AdminSale result = new AdminSale();
+		try{
+			result = dao.searchById(conn, id, user, locale);
+		}catch (Exception e) {
+			throw e;
+		}
+		return result;
 	}
 
 }

@@ -58,8 +58,27 @@
 		jQuery(row).find("td").eq(2).html(htmlIconEdit); */
     }
 	
-	 function submitStatus() {
+	function submitStatus() {
 		 
-	 }
+	}
+
+	function gotoView(id) {
+		document.getElementsByName("adminSale.id")[0].value = id;
+		frm = document.searchForm;
+		submitPage(frm, "<s:url value='/jsp/shopping/gotoViewAdminSale.action' />");
+	}
+
+	function gotoEdit(id) {
+		document.getElementsByName("adminSale.id")[0].value = id;
+		frm = document.searchForm;
+		submitPage(frm, "<s:url value='/jsp/shopping/gotoEditAdminSale.action' />");
+	}
 	
 </script>
+
+<style type="text/css">
+	.color-orange {
+		color: orange;
+		background-color: orange;
+	}
+</style>

@@ -43,7 +43,7 @@ public class CustomerSaleDAO extends AbstractDAO<CustomerSaleSearchCriteria, Cus
 		int paramIndex = 0;
 	    Object[] params = new Object[1];
 	    params[paramIndex++] = StringUtil.replaceSpecialString(criteria.getTypeId(), dbType, ResultType.NULL);
-		
+	    
 	    String sql = SQLUtil.getSQLString(schemas
                 , getSqlPath().getClassName()
                 , getSqlPath().getPath()

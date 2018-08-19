@@ -2,7 +2,7 @@
 SQL : นับจำนวนข้อมูลรายการสั่งซื้อ
 Description : 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-countData {
+countOrderMain {
 	SELECT 
 		COUNT(1) AS TOT
 	FROM ORDER_MAIN O
@@ -15,7 +15,7 @@ countData {
 SQL : ค้นหาข้อมูลรายการสั่งซื้อ
 Description : 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-searchOrderMain {
+searchAdminSale {
 	SELECT
 		O.ID
 		, O.NO
@@ -32,9 +32,12 @@ searchOrderMain {
 	INNER JOIN USER U ON O.USER_ID = U.USER_ID
 	WHERE O.NO = %s
 	AND O.SHIP = %s
+	
+	LIMIT %s
+	, %s
 }
 
-searchOrderDetail {
+searchAdminSaleById {
 	SELECT 
 		O.ID
 		, o.NO
@@ -47,13 +50,13 @@ searchOrderDetail {
 		, U.FIRST_NAME
 		, U.LAST_NAME
 		, P.CODE
-		, P.`DESC`
+		, P.PRODUCT_DESC
 		, D.TOTAL_NUM
 		, D.TOTAL_PRICE
 	FROM ORDER_MAIN O 
 	INNER JOIN USER U on O.USER_ID = U.USER_ID
 	INNER JOIN ORDER_DETAIL D on D.ORDER_ID = O.ID
-	INNER JOIN PRODUCT P on P.ID = D.PRODUCT_ID;
+	INNER JOIN PRODUCT P on P.ID = D.PRODUCT_ID
 	WHERE O.ID = %s
 }
 

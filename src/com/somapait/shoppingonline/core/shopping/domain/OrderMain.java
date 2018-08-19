@@ -9,13 +9,17 @@ public class OrderMain implements Serializable {
 	private String id;
 	private String no;
 	private String totalPrice;
-	private String userId;
+	
 	private String orderDate;
 	private String ship;
 	private String shipDate;
 	private String trackingNo;
 	private String cancel;
 	private String note;
+	
+	private String userId;
+	private String fullName;
+	
 	
 	
 	public String getId() {
@@ -78,6 +82,14 @@ public class OrderMain implements Serializable {
 	public void setNote(String note) {
 		this.note = note;
 	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+	
+	
 	
 	
 

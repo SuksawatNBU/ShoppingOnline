@@ -3,7 +3,8 @@ SQL : นับจำนวนข้อมูล product
 Description : 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 countProduct {
-	SELECT COUNT(1) AS TOT
+	SELECT 
+		COUNT(1) AS TOT
 	FROM PRODUCT P
 	INNER JOIN PRODUCT_TYPE PT ON P.TYPE_ID = PT.TYPE_ID
 	WHERE P.TYPE_ID = %s

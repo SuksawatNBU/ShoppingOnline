@@ -14,6 +14,8 @@ import com.somapait.common.CommonUser;
 import com.somapait.shoppingonline.core.shopping.admin.sale.domain.AdminSale;
 import com.somapait.shoppingonline.core.shopping.admin.sale.domain.AdminSaleSearch;
 import com.somapait.shoppingonline.core.shopping.admin.sale.domain.AdminSaleSearchCriteria;
+import com.somapait.shoppingonline.core.shopping.domain.OrderDetail;
+import com.somapait.shoppingonline.core.shopping.domain.OrderMain;
 
 import util.database.ConnectionUtil;
 import util.database.SQLUtil;
@@ -36,16 +38,18 @@ public class AdminSaleDAO  extends AbstractDAO<AdminSaleSearchCriteria, AdminSal
 	protected int countData(Connection conn, AdminSaleSearchCriteria criteria, CommonUser user, Locale locale) throws Exception {
 		int count = 0;
 		
+		if(criteria.getNo().equals("")){ criteria.setNo(null); }
+		if(criteria.getShip().equals("")){ criteria.setShip(null); }
+		
 		int paramIndex = 0;
 		Object[] params = new Object[2];
 		params[paramIndex++] = StringUtil.replaceSpecialString(criteria.getNo(), dbType, ResultType.NULL);
 		params[paramIndex++] = StringUtil.replaceSpecialString(criteria.getShip(), dbType, ResultType.NULL);
 		
-		schemas.clear();
 		String sql = SQLUtil.getSQLString(schemas
                 , getSqlPath().getClassName()
                 , getSqlPath().getPath()
-                , "countData"
+                , "countOrderMain"
                 , params);
         LogUtil.SELECTOR.debug("SQL : " + sql);
         
@@ -70,16 +74,16 @@ public class AdminSaleDAO  extends AbstractDAO<AdminSaleSearchCriteria, AdminSal
 		List<AdminSaleSearch> listResult = new ArrayList<AdminSaleSearch>();
 		
 		int paramIndex = 0;
-		Object[] params = new Object[2];
+		Object[] params = new Object[4];
 		params[paramIndex++] = StringUtil.replaceSpecialString(criteria.getNo(), dbType, ResultType.NULL);
 		params[paramIndex++] = StringUtil.replaceSpecialString(criteria.getShip(), dbType, ResultType.NULL);
-//		params[paramIndex++] = criteria.getStart() - 1;
-//        params[paramIndex++] = criteria.getLinePerPage();
+		params[paramIndex++] = criteria.getStart() - 1;
+        params[paramIndex++] = criteria.getLinePerPage();
         
 		String sql = SQLUtil.getSQLString(schemas
                 , getSqlPath().getClassName()
                 , getSqlPath().getPath()
-                , "searchOrderMain"
+                , "searchAdminSale"
                 , params);
         LogUtil.SELECTOR.debug("SQL : " + sql);
         
@@ -112,8 +116,55 @@ public class AdminSaleDAO  extends AbstractDAO<AdminSaleSearchCriteria, AdminSal
 
 	@Override
 	protected AdminSale searchById(Connection conn, String id, CommonUser user, Locale locale) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		AdminSale result = new AdminSale();
+		
+		int paramIndex = 0;
+		Object[] params = new Object[1];
+		params[paramIndex++] = StringUtil.replaceSpecialString(id, dbType, ResultType.NULL);
+        
+		String sql = SQLUtil.getSQLString(schemas
+                , getSqlPath().getClassName()
+                , getSqlPath().getPath()
+                , "searchAdminSaleById"
+                , params);
+        LogUtil.SELECTOR.debug("SQL : " + sql);
+        
+        Statement stmt = null;
+        ResultSet rst = null;
+        try{
+        	OrderMain orderMain = new OrderMain();
+        	OrderDetail orderDetail;
+        	List<OrderDetail> listOrderDetail =  new ArrayList<OrderDetail>();
+        	
+        	stmt = conn.createStatement();
+            rst = stmt.executeQuery(sql);
+            while (rst.next()) {
+            	orderMain.setId(StringUtil.nullToString(rst.getString("ID")));
+            	orderMain.setNo(StringUtil.nullToString(rst.getString("NO")));
+            	orderMain.setOrderDate(StringUtil.nullToString(rst.getString("ORDER_DATE")));
+            	orderMain.setShip(StringUtil.nullToString(rst.getString("SHIP")));
+            	orderMain.setShipDate(StringUtil.nullToString(rst.getString("SHIP_DATE")));
+            	orderMain.setTrackingNo(StringUtil.nullToString(rst.getString("TRACKING_NO")));
+            	orderMain.setNote(StringUtil.nullToString(rst.getString("NOTE")));
+            	orderMain.setUserId(StringUtil.nullToString(rst.getString("USER_ID")));
+            	orderMain.setFullName(StringUtil.nullToString(rst.getString("FIRST_NAME")) + " " + StringUtil.nullToString(rst.getString("FIRST_NAME")));
+            	
+            	orderDetail = new OrderDetail();
+            	orderDetail.setCode(StringUtil.nullToString(rst.getString("CODE")));
+            	orderDetail.setProductDesc(StringUtil.nullToString(rst.getString("PRODUCT_DESC")));
+            	orderDetail.setTotalNum(StringUtil.nullToString(rst.getString("TOTAL_NUM")));
+            	orderDetail.setTotalPrice(StringUtil.nullToString(rst.getString("TOTAL_PRICE")));
+            	listOrderDetail.add(orderDetail);       	
+            }
+            result.setOrderMain(orderMain);
+        	result.setListOrderDetail(listOrderDetail);
+        	
+        }catch (Exception e) {
+        	throw e;
+		}finally {
+			ConnectionUtil.closeAll(rst, stmt);
+		}
+		return result;
 	}
 
 	@Override

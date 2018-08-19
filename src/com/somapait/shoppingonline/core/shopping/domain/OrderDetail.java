@@ -1,27 +1,13 @@
 package com.somapait.shoppingonline.core.shopping.domain;
 
-import java.io.Serializable;
+public class OrderDetail extends Product {
 
-public class OrderDetail implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8459774430997472069L;
-	
-	private String id;
 	private String productId;
 	private String totalNum;
 	private String totalPrice;
 	private String orderId;
 	
-	
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
 	public String getProductId() {
 		return productId;
 	}
@@ -46,8 +32,4 @@ public class OrderDetail implements Serializable {
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
-	
-	
-	
-
 }

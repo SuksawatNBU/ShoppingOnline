@@ -66,7 +66,11 @@
 		    		<s:iterator id="listResult" value="listResult" status="listResultStatus">
 		    			<tr>
 		    				<td align="center"><s:property value="#listResultStatus.index + 1"/></td>
-		    				<td align="center"><input type="checkbox" name="id"></td>
+		    				<td align="center">
+		    					<s:if test='%{ship eq "N"}'>
+									<input type="checkbox" name="id">
+								</s:if>
+		    				</td>
 		    				<td align="center"><s:property value="no"/></td>
 		    				<td align="center"><s:property value="orderDate"/></td>
 		    				<td align="left"><s:property value="fullName"/></td>
@@ -86,18 +90,22 @@
 		    				</td>
 		    				<td align="center">
 		    					<s:if test='%{ship eq "Y"}'>
-									<i class="fas fa-home"></i>
+									<button id="orderAdd" class="submitBtn" type="button" disabled="disabled">
+				  						<i class="fas fa-home"></i>
+									</button>
 								</s:if>
 								<s:elseif test='%{ship eq "N"}'>
-									<i class="fas fa-plane-departure"></i>
+									<button id="orderAdd" class="submitBtn" type="button" onclick="gotoEdit(<s:property value="id"/>);"> 
+				  						<i class="fas fa-plane-departure"></i>
+									</button>
 								</s:elseif >
 		    				</td>
 		    				<td align="center">
 		    					<s:if test='%{cancel eq "Y"}'>
-									<i class="fas fa-lightbulb"></i>
+									<i class="far fa-lightbulb color-orange"></i>
 								</s:if>
 								<s:elseif test='%{cancel eq "N"}'>
-									<i class="far fa-lightbulb"></i>
+									<i class="far fa-lightbulb color-bk"></i>
 								</s:elseif >
 		    				</td>
 		    			</tr>

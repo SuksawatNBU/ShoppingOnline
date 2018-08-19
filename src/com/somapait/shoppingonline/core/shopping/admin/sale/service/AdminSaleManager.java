@@ -51,8 +51,13 @@ public class AdminSaleManager extends AbstractManager<AdminSaleSearchCriteria, A
 	//TODO method searchById(String id) สำหรับไปค้นหารายการสั่งซื้อที่เลือกจากหน้าค้นหา แล้วนำไปแสดง
 	@Override
 	public AdminSale searchById(String id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		AdminSale result = new AdminSale();
+		try {
+			result = service.searchById(conn, id, user, locale);
+		} catch (Exception e) {
+			throw e;
+		}
+		return result;
 	}
 
 	@Override
