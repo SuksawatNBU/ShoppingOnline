@@ -17,6 +17,7 @@
 		</action>
 		
 		<action name="*AdminSale" class="com.somapait.shoppingonline.web.shopping.admin.sale.action.AdminSaleAction" method="{1}">
+			<result name="init">/jsp/shopping/admin/sale/orderdSearch.jsp</result>
 			<result name="search">/jsp/shopping/admin/sale/orderdSearch.jsp</result>
 			<result name="addEdit">/jsp/shopping/admin/sale/shippingEditView.jsp</result>
 		</action>

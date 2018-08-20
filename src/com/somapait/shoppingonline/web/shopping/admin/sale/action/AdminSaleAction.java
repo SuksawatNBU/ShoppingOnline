@@ -79,6 +79,7 @@ public class AdminSaleAction extends CommonAction implements ModelDriven<AdminSa
 	        AdminSaleManager manager = new AdminSaleManager(conn, null, getLocale());
 	        List<AdminSaleSearch> listResult = manager.search(model.getCriteria());
 	        model.setListResult(listResult);
+	        model.getCriteria().setTotalResult(listResult.size());
 	        
 	        //4.จัดการผลลัพธ์และข้อความ ถ้าไม่พบข้อมูล
 	        manageSearchResult(model, listResult);
@@ -106,8 +107,31 @@ public class AdminSaleAction extends CommonAction implements ModelDriven<AdminSa
 
 	@Override
 	public String edit() throws AuthorizationException {
-		
-	    return null;
+		String result = ReturnType.SEARCH.getResult();
+	    Connection conn = null;
+	    try {
+	    	//1.สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
+	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
+	 
+	        //2.ตรวจสอบสิทธิ์ หน้าแก้ไข
+	        result = manageEdit(conn, model);
+	 
+	        //3.ค้นหาข้อมูลผู้ใช้ ตาม id ที่เลือกมาจากหน้าจอ
+	        AdminSaleManager manager = new AdminSaleManager(conn, null, getLocale());
+	        manager.edit(model.getAdminSale());
+	 
+	    }catch (Exception e) {
+	    	//4.จัดการ exception กรณีที่มี exception เกิดขึ้นในระบบ
+	    	 setMessage(MessageType.ERROR, getText("30008"), ResultType.BASIC);
+	    	 
+	    	//5.กรณีที่เกิด exception ขึ้นในระบบ จะต้องแสดง message error และคงข้อมูลที่กรอกไว้ในหน้าแก้ไขเช่นเดิม
+	        result = ReturnType.ADD_EDIT.getResult();
+	        getComboForAddEdit(conn);
+	    } finally {
+	        //6.Close connection หลังเลิกใช้งาน
+	        ConnectionUtil.close(conn);
+	    }
+	    return result;
 	}
 
 	@Override
@@ -219,6 +243,30 @@ public class AdminSaleAction extends CommonAction implements ModelDriven<AdminSa
 		} catch (Exception e) {
 			
 		}
+		return result;
+	}
+	
+	public String cancel() throws AuthorizationException {
+		String result = null;
+		Connection conn = null;
+		try {
+			//1.สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
+	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
+	 
+	        //2.ตรวจสอบสิทธิ์ หน้าแก้ไข
+	        /*manageSearch(conn, model, model.getCriteria(), null);*/
+	        result = ReturnType.SEARCH.getResult(); 
+
+		} catch (Exception e) {
+			getComboForAddEdit(conn);
+			//3.
+			manageException(conn, F_CODE, this, e, model);
+		} finally {
+			getComboForSearch(conn);
+			//4.
+			ConnectionUtil.close(conn);
+		}
+
 		return result;
 	}
 }

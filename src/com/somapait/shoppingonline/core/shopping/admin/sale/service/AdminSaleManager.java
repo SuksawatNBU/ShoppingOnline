@@ -69,8 +69,29 @@ public class AdminSaleManager extends AbstractManager<AdminSaleSearchCriteria, A
 	//TODO method edit(AdminSale adminSale) สำหรับจัดส่ง
 	@Override
 	public int edit(AdminSale obj) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		if(obj.getOrderMain().getId() == "0" || obj.getOrderMain().getId() == ""){
+			return 0;
+		}
+		
+		int id = 0;
+		try {
+	        //2.Begin transaction
+	        conn.setAutoCommit(false);
+	 
+	        //3.แก้ไขข้อมูลผู้ใช้งาน
+	        id = service.edit(conn, obj, user, locale);
+
+	        conn.commit();
+	 
+	    } catch (Exception e) {
+	    	LogUtil.SELECTOR.debug("Eror : ",e);
+	        conn.rollback();
+	        throw e;
+	    } finally {
+	        conn.setAutoCommit(true);
+	    }
+	    return id;
 	}
 
 	@Override

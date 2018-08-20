@@ -175,8 +175,39 @@ public class AdminSaleDAO  extends AbstractDAO<AdminSaleSearchCriteria, AdminSal
 
 	@Override
 	protected int edit(Connection conn, AdminSale obj, CommonUser user, Locale locale) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		int paramIndex = 0;
+	    int id = 0;
+	    
+	    String shipDate = StringUtil.replaceSpecialString(obj.getOrderMain().getShipDate(), dbType, ResultType.NULL);
+		/*if (shipDate != null) {
+			Calendar startCalendar = CalendarUtil.getCalendarFromDateString(shipDate, ParameterConfig.getParameter().getDateFormat().getForDisplay(), ParameterConfig.getParameter().getApplication().getDatabaseLocale());
+			shipDate = CalendarUtil.getDateStringFromCalendar(startCalendar, ParameterConfig.getParameter().getDateFormat().getForDatabaseInsert());
+		}	*/
+
+	    Object[] params = new Object[11];
+	    params[paramIndex++] = StringUtil.replaceSpecialString(obj.getOrderMain().getShip(), dbType, ResultType.NULL);
+        params[paramIndex++] = shipDate;
+        params[paramIndex++] = StringUtil.replaceSpecialString(obj.getOrderMain().getNote(), dbType, ResultType.NULL);
+        params[paramIndex++] = StringUtil.replaceSpecialString(obj.getOrderMain().getTrackingNo(), dbType, ResultType.NULL);
+        params[paramIndex++] = StringUtil.replaceSpecialString(obj.getOrderMain().getId(), dbType, ResultType.NULL);
+        
+        String sql = SQLUtil.getSQLString(schemas
+        		, getSqlPath().getClassName()
+        		, getSqlPath().getPath()
+        		, "updateOrderMain"
+        		, params);
+        LogUtil.SELECTOR.debug("SQL : " + sql);
+        
+        Statement stmt = null;
+        try {
+        	stmt = conn.createStatement();
+        	stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+        	ConnectionUtil.closeAll(null, stmt);
+        }
+        return id ;
 	}
 
 	@Override

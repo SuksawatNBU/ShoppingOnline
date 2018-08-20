@@ -12,7 +12,6 @@ public class AdminSaleSearchCriteria extends SearchCriteria{
 	private String no;
 	private String ship;
 	
-	
 	public String getNo() {
 		return no;
 	}

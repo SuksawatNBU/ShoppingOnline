@@ -4,7 +4,7 @@
 <script type="text/javascript">
 	function sf(){
 		if(jQuery("[name='criteria.criteriaKey']").val() != ""){
-			/* searchAjax(); */
+			/* search(); */
         }
 	}
 	
@@ -49,17 +49,30 @@
     }
 	
 	function manageRow(row, data) {
-		/* var htmlIconEdit = "";
-		if(data.workStatus == "เลิกจ้าง"){
-			htmlIconEdit = jQuery("#tempIconEditDisable").html();
-		}else {
-			htmlIconEdit = jQuery("#tempIconEditEnable").html();
-		}
-		jQuery(row).find("td").eq(2).html(htmlIconEdit); */
+		
     }
 	
+	function checkboxToggle() {
+		
+	}
+	
 	function submitStatus() {
-		 
+		
+		//name ของ checkbox table กลางเป็นคน gen ให้โดยชื่อเดียวกัน
+	    var chk = validateSelect('criteria.selectedIds');
+	    if (chk == false) {
+	        return false;
+	    }
+	 	
+	    if(confirm(msg) == false){
+	        return false;
+	    }
+	 
+	    //ต้องสร้างให้เนื่องจากเป็น attr ที่อยู่ใน CommonDomain
+	    document.getElementsByName('criteria.statusForUpdate')[0].value = active;   
+	    
+	    frm = document.searchForm;
+	    submitPage(frm, action);
 	}
 
 	function gotoView(id) {
@@ -67,18 +80,17 @@
 		frm = document.searchForm;
 		submitPage(frm, "<s:url value='/jsp/shopping/gotoViewAdminSale.action' />");
 	}
-
+	
 	function gotoEdit(id) {
 		document.getElementsByName("adminSale.id")[0].value = id;
 		frm = document.searchForm;
 		submitPage(frm, "<s:url value='/jsp/shopping/gotoEditAdminSale.action' />");
 	}
-	
 </script>
 
 <style type="text/css">
 	.color-orange {
 		color: orange;
-		background-color: orange;
+		
 	}
 </style>

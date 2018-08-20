@@ -67,7 +67,8 @@ Description :
 updateOrderMain {
 	UPDATE ORDER_MAIN SET
 	SHIP = %s
-	SHIP_DATE = %s
-	NOTE = %s
+	, SHIP_DATE = %s
+	, TRACKING_NO = %s
+	, NOTE = %s
 	WHERE ID = %s
 }

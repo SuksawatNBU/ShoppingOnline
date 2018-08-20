@@ -20,8 +20,6 @@ public class OrderMain implements Serializable {
 	private String userId;
 	private String fullName;
 	
-	
-	
 	public String getId() {
 		return id;
 	}

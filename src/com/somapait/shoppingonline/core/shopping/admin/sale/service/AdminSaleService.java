@@ -55,5 +55,15 @@ public class AdminSaleService extends AbstractService {
 		}
 		return result;
 	}
+	
+	protected int edit(Connection conn, AdminSale obj, CommonUser user, Locale locale) throws Exception {
+		int id = 0;
+		try {
+			id = dao.edit(conn, obj, user, locale);
+		} catch (Exception e) {
+			throw e;
+		}
+		return id;
+	}
 
 }

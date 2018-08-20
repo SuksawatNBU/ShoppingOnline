@@ -407,7 +407,7 @@ public class CommonAction extends ActionSupport implements Serializable {
 
 	public String manageEdit(Connection conn, CommonModel model) throws AuthorizationException {
 		setMessage(CommonAction.MessageType.SUCCESS, getText("30004"), ResultType.CHAIN);
-		String result = ReturnType.ADD_EDIT.getResult();
+		String result = ReturnType.SEARCH.getResult();
 		model.setPage(CommonModel.PageType.EDIT);
 		return result;
 	}

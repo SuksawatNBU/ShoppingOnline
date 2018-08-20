@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
 	
-	<s:include value="/jsp/shopping/admin/sale/include/ja-css.jsp"/>
+	<s:include value="/jsp/shopping/admin/sale/include/ja-css-search.jsp"/>
 
 </head>
 <body>
@@ -35,8 +35,12 @@
 					<td></td>
 					<td></td>
 					<td>
-						<button type="button" class="btn btn-primary btn-sm" onclick="search();">Seach</button>
-						<button type="button" class="btn btn-secondary btn-sm" onclick="clearPage()">Clear</button>
+						<button type="button" class="btn btn-primary btn-sm" onclick="search();">
+							<span><i class="fas fa-search"></i> Seach</span>
+						</button>
+						<button type="button" class="btn btn-secondary btn-sm" onclick="clearPage()">
+							<span><i class="fas fa-sync-alt"></i> Clear</span>
+						</button>
 					</td>
 				</tr>
 			</table>
@@ -46,6 +50,7 @@
 	    
 	    <!------------------------------------- Result ------------------------------------->
 	    <div id="div_datatable">
+	    	<b>จำนวนรายการสั่งซื้อ <s:property value="criteria.totalResult"/> รายการ</b>
 		    <table id="tableResult" class="table table-striped">
 		    	<thead>
 		      		<tr>
@@ -116,12 +121,21 @@
 		    			</tr>
 		    		</s:else>
 		    	</tbody>
+		    	<tfoot>
+		    		<tr>
+		    			<td colspan="10">
+		    				<button id="orderAdd" class="submitBtn" type="button" onclick="gotoEdit(<s:property value="id"/>);"> 
+				  				<span><i class="far fa-lightbulb color-orange"></i> ยกเลิก</span>
+							</button>
+		    			</td>
+		    		</tr>
+		    	</tfoot>
 		  	</table>
 	  	</div>
 	   	
 	   	<!------------------------------------- BUTTON ------------------------------------->
 	   	<div style="display: ;"><s:include value="/jsp/template/hiddenSearchForDatatable.jsp" /></div>
-	    <s:hidden name="adminSale.id" />
+	    <s:textfield name="adminSale.id" />
 	    <s:token/>
     
 	</s:form>
