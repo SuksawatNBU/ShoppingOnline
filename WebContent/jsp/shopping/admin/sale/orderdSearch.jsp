@@ -124,7 +124,7 @@
 		    	<tfoot>
 		    		<tr>
 		    			<td colspan="10">
-		    				<button id="orderAdd" class="submitBtn" type="button" onclick="gotoEdit(<s:property value="id"/>);"> 
+		    				<button id="orderAdd" class="submitBtn" type="button" onclick=""> 
 				  				<span><i class="far fa-lightbulb color-orange"></i> ยกเลิก</span>
 							</button>
 		    			</td>

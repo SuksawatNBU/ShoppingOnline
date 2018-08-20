@@ -104,8 +104,11 @@ public class AdminSaleManager extends AbstractManager<AdminSaleSearchCriteria, A
 
 	@Override
 	public int updateActive(String ids, String activeFlag) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+	        return service.updateActive(conn, ids, activeFlag);
+	    } catch (Exception e) {
+	        throw e;
+	    }
 	}
 
 	public List<CommonSelectItem> getListShip(){

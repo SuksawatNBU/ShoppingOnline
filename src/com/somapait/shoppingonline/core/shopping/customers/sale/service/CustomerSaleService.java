@@ -71,6 +71,16 @@ public class CustomerSaleService extends AbstractService {
 		return result;
 	}
 	
+	protected CustomerSale searchProductByIds(Connection conn, String ids, CommonUser user, Locale locale) throws Exception {
+		CustomerSale result = new CustomerSale();
+		try{
+			result = dao.searchProductByIds(conn, ids, user, locale);
+		}catch (Exception e) {
+			throw e;
+		}
+		return result;
+	}
+	
 	protected int addOrderMain(Connection conn, OrderMain obj, CommonUser user, Locale locale) throws Exception {
 		int id = 0;
 		try {

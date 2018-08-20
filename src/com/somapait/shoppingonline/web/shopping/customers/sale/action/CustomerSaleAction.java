@@ -19,7 +19,6 @@ import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerS
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleSearch;
 import com.somapait.shoppingonline.core.shopping.customers.sale.service.CustomerSaleManager;
 import com.somapait.shoppingonline.core.shopping.domain.OrderProductCart;
-import com.somapait.shoppingonline.core.shopping.domain.Product;
 
 import util.database.ConnectionProvider;
 import util.database.ConnectionUtil;
@@ -33,7 +32,6 @@ import util.log.LogUtil;
 public class CustomerSaleAction extends CommonAction implements ModelDriven<CustomerSaleModel>, InterfaceAction{
 
 	private static final long serialVersionUID = -1195418747257577141L;
-	public static final String DEFAULT_SESSION_ATTRIBUTE_ORDER = "order";
 	
 	private CustomerSaleModel model = new CustomerSaleModel();
 	
@@ -147,7 +145,7 @@ public class CustomerSaleAction extends CommonAction implements ModelDriven<Cust
 	        //3. get parameter in url 
 	        HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
 	        model.getCriteria().setTypeId(request.getParameter("typeId"));
-
+	        
 	        //4. การค้นหา
 	        CustomerSaleManager manager = new CustomerSaleManager(conn, null, getLocale());
 	        List<CustomerSaleSearch> listResult = manager.searchProductList(model.getCriteria());
@@ -177,18 +175,18 @@ public class CustomerSaleAction extends CommonAction implements ModelDriven<Cust
 	        
 	        //2.ตรวจสอบสิทธิ์การใช้งาน และจัดการเงือนไข
 	        manageAdd(conn, model);
-	        result = ReturnType.SEARCH.getResult();
+	        result = ReturnType.ADD_DO.getResult();
 	        
-	        //3. ค้นหาข้อมูล ตาม id
+	        //3. นำ id เข้า session
+	        OrderProductCart.put(model.getCustomerSale().getId(), model.getCustomerSale().getId());
+	        
+	        //4. สำหรับทำ  where in หน้าแสดงรายการสั่งซื้อ
 	        CustomerSaleManager manager = new CustomerSaleManager(conn, null, getLocale());
-	        Product product = manager.searchProductById(model.getCustomerSale().getId());
+	        manager.addOrderProductInSession(model.getCustomerSale().getId());
 	        
-	        System.out.println("id : " + model.getCustomerSale().getId());
-	        
-	        OrderProductCart.put(DEFAULT_SESSION_ATTRIBUTE_ORDER, product);
-	        
-	        Product product2 = (Product) OrderProductCart.get(DEFAULT_SESSION_ATTRIBUTE_ORDER);
-	        System.out.println("id-Session : " + product2.getId());
+	        //5. การค้นหา
+	        List<CustomerSaleSearch> listResult = manager.searchProductList(model.getCriteria());
+	        model.setListResult(listResult);
 	        
 	    }catch (Exception e) {
 	    	manageException(conn, F_CODE, this, e, getModel());
@@ -206,10 +204,15 @@ public class CustomerSaleAction extends CommonAction implements ModelDriven<Cust
 	    	//1.สร้าง connection โดยจะต้องระบุ lookup ที่ใช้ด้วย
 	        conn = new ConnectionProvider().getConnection(conn, DBLookup.MYSQL_TEST.getLookup());
 	        
-	        //2.
+	        //2.ตรวจสอบสิทธิ์การใช้งาน และจัดการเงือนไข
 	        result = manageGotoAdd(conn, model);
 	        
-	        /*List<CustomerSale> customerSale = new ArrayList<CustomerSale>();*/
+	        CustomerSaleManager manager = new CustomerSaleManager(conn, null, getLocale());
+	        CustomerSale customerSale = manager.searchProductByIds(OrderProductCart.get(OrderProductCart.orderProduct));
+	        model.setCustomerSale(customerSale);
+	        model.getCriteria().setTotalResult(customerSale.getListOrderDetail().size());
+	        
+	        System.out.println("customerSale Size : " + customerSale.getListOrderDetail().size());
 	        
 	    }catch (Exception e) {
 	    	manageException(conn, F_CODE, this, e, getModel());

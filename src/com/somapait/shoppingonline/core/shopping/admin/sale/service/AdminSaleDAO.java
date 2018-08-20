@@ -217,10 +217,30 @@ public class AdminSaleDAO  extends AbstractDAO<AdminSaleSearchCriteria, AdminSal
 	}
 
 	@Override
-	protected int updateActive(Connection conn, String ids, String activeFlag, CommonUser user, Locale locale)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	protected int updateActive(Connection conn, String ids, String activeFlag, CommonUser user, Locale locale) throws Exception {
+		int paramIndex = 0;
+	    Object[] params = new Object[3];
+	    params[paramIndex++] = activeFlag;
+	    params[paramIndex++] = user.getUserId();
+	    params[paramIndex++] = ids;
+	 
+	    String sql = SQLUtil.getSQLString(schemas
+	            , getSqlPath().getClassName()
+	            , getSqlPath().getPath()
+	            , "setActiveStatus"
+	            , params);
+	    LogUtil.SELECTOR.debug("SQL : " + sql);
+	 
+	    Statement stmt = null;
+	    try {
+	        stmt = conn.createStatement();
+	        stmt.executeUpdate(sql);
+	    } catch (Exception e) {
+	        throw e;
+	    } finally {
+	        ConnectionUtil.closeStatement(stmt);
+	    }
+	    return 0;
 	}
 
 	@Override

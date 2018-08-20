@@ -4,14 +4,14 @@
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
 	<package name="shopping" namespace="/jsp/shopping" extends="common">
-	
-		<action name="test">
-			<result>/jsp/shopping/customers/sale/newFile.jsp</result>
-		</action>
 		
 		<action name="*CustomerSale" class="com.somapait.shoppingonline.web.shopping.customers.sale.action.CustomerSaleAction" method="{1}">
 			<result name="search">/jsp/shopping/customers/sale/productListSearch.jsp</result>
 			<result name="addDo">/jsp/shopping/customers/sale/productListSearch.jsp</result>
+			<!-- <result name="addDo" type="chain">
+				<param name="actionName">searchCustomerSale</param>
+            	<param name="namespace">/jsp/shopping</param>
+			</result> -->
 			<result name="addEdit">/jsp/shopping/customers/sale/cartAndOrderAdd.jsp</result>
 			<result name="complete">/jsp/shopping/customers/sale/cartAndOrderComplete.jsp</result>
 		</action>

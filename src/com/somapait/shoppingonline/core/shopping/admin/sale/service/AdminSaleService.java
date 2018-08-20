@@ -65,5 +65,13 @@ public class AdminSaleService extends AbstractService {
 		}
 		return id;
 	}
+	
+	protected int updateActive(Connection conn, String ids, String activeFlag) throws Exception{
+	    try {
+	        return dao.updateActive(conn, ids, activeFlag, user, locale);
+	    } catch (Exception e) {
+	        throw e;
+	    }
+	}
 
 }

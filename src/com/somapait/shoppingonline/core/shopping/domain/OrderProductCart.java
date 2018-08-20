@@ -7,32 +7,7 @@ import com.opensymphony.xwork2.ActionContext;
 
 public class OrderProductCart {
 	
-	/*private static final String HELLO_COUNT = "1000";
-	private Map<String, Object> productCart ;
-
-	public Map<String, Object> getProductCart() {
-		return productCart;
-	}
-
-	public void setProductCart(Map<String, Object> productCart) {
-		this.productCart = productCart;
-	}
-	
-	public void setSession(Map<String, Object> session) {
-		productCart = session ;
-	}
-
-	private void increaseHelloCount() {
-	    Integer helloCount = (Integer) productCart.get(HELLO_COUNT);
-
-	    if (helloCount == null ) {
-	        helloCount = 1;
-	    } else {
-	        helloCount++;
-	    }
-
-	    productCart.put(HELLO_COUNT, helloCount);
-	}*/
+	public final static String orderProduct = "orderProduct";
 	
 	/**
 	 * สำหรับเก็บค่าลงใน session ผ่าน Action class เช่น การเรียกใช้ผ่าน Action ต่างๆ ของ struts
@@ -48,8 +23,8 @@ public class OrderProductCart {
 	 * @param key
 	 * @param value
 	 */
-	public static Object get(String key) {
-		return ActionContext.getContext().getSession().get(key);
+	public static String get(String key) {
+		return (String) ActionContext.getContext().getSession().get(key);
 	}
 	
 	/**
@@ -60,4 +35,5 @@ public class OrderProductCart {
 	public static void setAttribute(String key, Object value) {
 		ServletActionContext.getRequest().getSession().setAttribute(key, value);
 	}
+	
 }

@@ -12,8 +12,10 @@
 		
 	}
 	
-	function addProduct(id){
+	function addProduct(id,typeId){
 		document.getElementsByName("customerSale.id")[0].value = id;
+		
+		document.getElementsByName("criteria.typeId")[0].value = typeId;
 		
 		frm = document.fromProductList;
 		submitPage(frm, "<s:url value='/jsp/shopping/addToCartAjaxCustomerSale.action' />");
@@ -27,7 +29,8 @@
 			<div class="card" style="width: 18rem;">
 				<div class="row">
 				    <%-- <div class="col"><img class="card-img-top" src="<s:url value='' /><s:property value='image'/>"></div> --%>
-				    <div class="col"><img class="card-img-top" src="<s:url value='/images/product/type/product_01/S001.jpg' />"></div>
+				    <div class="col"><img class="card-img-top" src="<s:url value='%{image}' />" > </div>
+				    <%-- <div class="col"><img class="card-img-top" src="<s:url value='/images/product/type/product_01/S001.jpg' />"></div> --%>
     				<div class="col">
     					<div class="card-text">
     						<br/>
@@ -44,7 +47,7 @@
 			  	<div class="row text-center">
 			  		<div class="col">
 			  			<s:if test='%{stockNum != "0"}'>
-			  				<button id="orderAdd" class="submitBtn" type="button" onclick="addProduct(<s:property value="id"/>);"> 
+			  				<button id="orderAdd" class="submitBtn" type="button" onclick="addProduct(<s:property value="id"/>, <s:property value="typeId"/>);"> 
 			  					<span> <img src="<s:url value='/images/icon/i_add.png' />"> &nbsp;<s:text name="shopping.orderAdd" />&nbsp; </span>
 							</button>
 			  			</s:if>
@@ -57,7 +60,11 @@
 			<br/>
 		</s:iterator>
 		
+		<!-- Page Navigator -->
+		
+		
 		<s:hidden name="customerSale.id" />
+		<s:hidden name="criteria.typeId" />
 		<s:token />
 	</s:form>
 </body>

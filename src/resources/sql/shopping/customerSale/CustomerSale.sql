@@ -22,6 +22,8 @@ searchProduct {
 		, P.PRICE
 		, P.STOCK_NUM
 		, CONCAT(PT.IMAGE_PATH, '', P.IMAGE_NAME) AS IMAGE
+		, P.IMAGE_NAME
+		, PT.IMAGE_PATH
 		, PT.TYPE_ID
 		, PT.TYPE_DESC
 		, PT.SEQ
@@ -31,6 +33,22 @@ searchProduct {
 	ORDER BY P.CODE
 }
 
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL : ค้นหารายสินค้าที่จะสั่งซื้อ
+Description : 
+------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+searchProductByIds {
+	SELECT
+		P.ID
+		, P.CODE
+		, CONCAT(PT.IMAGE_PATH, '', P.IMAGE_NAME) AS IMAGE
+		, P.PRODUCT_DESC
+		, P.PRICE
+		, P.STOCK_NUM
+	FROM PRODUCT P
+	INNER JOIN PRODUCT_TYPE PT ON P.TYPE_ID = PT.TYPE_ID
+	WHERE P.ID IN (%s)
+}
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------
 SQL : ค้นหาข้อมูล product ตาม id
 Description : 
@@ -48,8 +66,7 @@ searchProductById {
 		, PT.SEQ
 	FROM PRODUCT P
 	INNER JOIN PRODUCT_TYPE PT ON P.TYPE_ID = PT.TYPE_ID
-	WHERE P.TYPE_ID = %s
-	ORDER BY P.CODE
+	WHERE P.ID = %s
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------

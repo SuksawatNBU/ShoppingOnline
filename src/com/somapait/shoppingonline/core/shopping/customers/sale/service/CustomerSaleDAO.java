@@ -148,6 +148,64 @@ public class CustomerSaleDAO extends AbstractDAO<CustomerSaleSearchCriteria, Cus
 		}
 		return result;
 	}
+	
+	/**
+	* @Description ค้นหาข้อมูลสินค้าตามตะกร้าสินค้า
+	* @return CustomerSale
+	* @throws Exception
+	*/
+	protected CustomerSale searchProductByIds(Connection conn, String ids, CommonUser user, Locale locale) throws Exception {
+		CustomerSale result = new CustomerSale();
+		
+		if(ids == null || ids == ""){
+			return result;
+		}
+		
+		int paramIndex = 0;
+		Object[] params = new Object[1];
+		params[paramIndex++] = StringUtil.replaceSpecialString(ids, dbType, ResultType.NULL);
+        
+		String sql = SQLUtil.getSQLString(schemas
+                , getSqlPath().getClassName()
+                , getSqlPath().getPath()
+                , "searchProductByIds"
+                , params);
+        LogUtil.SELECTOR.debug("SQL : " + sql);
+        
+        Statement stmt = null;
+        ResultSet rst = null;
+        try{
+        	OrderMain orderMain = new OrderMain();
+        	OrderDetail orderDetail;
+        	List<OrderDetail> listOrderDetail =  new ArrayList<OrderDetail>();
+        	
+        	int totalPrice = 0;
+        	
+        	stmt = conn.createStatement();
+            rst = stmt.executeQuery(sql);
+            while (rst.next()) {
+            	orderDetail = new OrderDetail();
+            	orderDetail.setProductId(StringUtil.nullToString(rst.getString("ID")));
+            	orderDetail.setCode(StringUtil.nullToString(rst.getString("CODE")));
+            	orderDetail.setImage(StringUtil.nullToString(rst.getString("IMAGE")));
+            	orderDetail.setProductDesc(StringUtil.nullToString(rst.getString("PRODUCT_DESC")));
+            	orderDetail.setPrice(StringUtil.nullToString(rst.getString("PRICE")));
+            	orderDetail.setTotalNum("1");
+            	orderDetail.setTotalPrice(StringUtil.nullToString(rst.getString("PRICE")));
+            	listOrderDetail.add(orderDetail); 
+            	
+            	totalPrice = totalPrice + Integer.parseInt(orderDetail.getTotalPrice());
+            	orderMain.setTotalPrice(String.valueOf(totalPrice));
+            }
+            result.setOrderMain(orderMain);
+            result.setListOrderDetail(listOrderDetail);
+        }catch (Exception e) {
+        	throw e;
+		}finally {
+			ConnectionUtil.closeAll(rst, stmt);
+		}
+		return result;
+	}
 
 	@Override
 	protected int add(Connection conn, CustomerSale obj, CommonUser user, Locale locale) throws Exception {
@@ -168,8 +226,7 @@ public class CustomerSaleDAO extends AbstractDAO<CustomerSaleSearchCriteria, Cus
 
 	@Override
 	protected int updateActive(Connection conn, String ids, String activeFlag, CommonUser user, Locale locale) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	    return 0;
 	}
 
 	@Override
@@ -206,12 +263,12 @@ public class CustomerSaleDAO extends AbstractDAO<CustomerSaleSearchCriteria, Cus
             	result.setPrice(StringUtil.nullToString(rst.getString("PRICE")));
             	result.setStockNum(StringUtil.nullToString(rst.getString("STOCK_NUM")));
             	result.setImage(StringUtil.nullToString(rst.getString("IMAGE")));
+            	result.setImageName(StringUtil.nullToString(rst.getString("IMAGE_NAME")));
+            	result.setImagePath(StringUtil.nullToString(rst.getString("IMAGE_PATH")));
             	result.setTypeId(StringUtil.nullToString(rst.getString("TYPE_ID")));
             	result.setTypeDesc(StringUtil.nullToString(rst.getString("TYPE_DESC")));
             	result.setSeq(StringUtil.nullToString(rst.getString("SEQ")));
             	listResult.add(result);
-            	
-            	System.out.println("image : " + result.getImage());
             }
         }catch (Exception e) {
         	throw e;

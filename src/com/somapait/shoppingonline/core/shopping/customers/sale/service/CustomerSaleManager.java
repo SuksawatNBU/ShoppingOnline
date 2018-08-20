@@ -14,6 +14,7 @@ import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerS
 import com.somapait.shoppingonline.core.shopping.customers.sale.domain.CustomerSaleSearchCriteria;
 import com.somapait.shoppingonline.core.shopping.domain.OrderDetail;
 import com.somapait.shoppingonline.core.shopping.domain.OrderMain;
+import com.somapait.shoppingonline.core.shopping.domain.OrderProductCart;
 import com.somapait.shoppingonline.core.shopping.domain.Product;
 
 import util.log.LogUtil;
@@ -79,6 +80,17 @@ public class CustomerSaleManager extends AbstractManager<CustomerSaleSearchCrite
 		}
 		return result;
 	}
+	
+	public CustomerSale searchProductByIds(String id) throws Exception {
+		CustomerSale result = new CustomerSale();
+		try{
+			result = service.searchProductByIds(conn, id, user, locale);
+	    
+		}catch (Exception e) {
+			throw e;
+		}
+		return result;
+	}
 
 	//TODO method add(CustomerSale customerSale) สำหรับทำรายการสั่งซื้อ
 	@Override
@@ -130,6 +142,21 @@ public class CustomerSaleManager extends AbstractManager<CustomerSaleSearchCrite
 	public int updateActive(String ids, String activeFlag) throws Exception {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	public void addOrderProductInSession(String id){
+		final String orderProduct = OrderProductCart.orderProduct;
+		String order = OrderProductCart.get(orderProduct);
+		if(order != null) {
+			order += "," + id;
+		}else{
+			order = id;
+		}
+		
+		System.out.println("=======================================");
+		System.out.println("order : " + order);
+		
+		OrderProductCart.put(orderProduct, order);
 	}
 
 
